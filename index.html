@@ -1,58 +1,83 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>My First website</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="https://kit.fontawesome.com/bcdaec150d.js" crossorigin="anonymous"></script>
-    </head>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tvoje Meno</title>
+  <meta name="description" content="Osobná stránka: Tvoje Meno">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
 
-    <body>
-        
-        <header>
-            <h1>Hamoks Website</h1>
-        </header>
+    <aside class="side">
+      <div class="avatar" aria-hidden="true">HM</div>
+      <h1>Hamoks</h1>
+      <p class="tagline">Študent zo Slovenska. Väčšinou programujem, občas riešim aj iné blbosti.</p>
 
-        <nav class="navbar">
-            <ul>
-                <li class="textnav"><a href="">Home</a></li>
-                <li class="textnav"><a href="">About</a></li>
-                <li class="textnav"><a href="">Projects</a></li>
-                <li class="icon">
-                    <a href="https://www.instagram.com/tomas_hamSSoks/">
-                        <i class="fa-brands fa-instagram fa-4x" style="color: #da4bdd;"></i>
-                    </a>
-                </li>
-                <li class="icon">
-                    <a href="https://www.youtube.com/channel/UCalkDCm6WYdwh6H4rnZuiow">
-                        <i class="fa-brands fa-youtube fa-4x" style="color: #fc2c2c;"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+      <nav class="links" aria-label="Moje odkazy">
+        <a class="link" href="https://github.com/Hamoks-s">
+          <span>GitHub</span><small>@Hamoks-s</small>
+        </a>
+        <a class="link" href="https://www.instagram.com/_hamoks_/">
+          <span>Instagram</span><small>@_hamoks_</small>
+        </a>
+        <a class="link" href="https://discord.com/users/Hamoks">
+          <span>Discord</span><small>Hamoks</small>
+        </a>
+         <a class="link" href="https://www.youtube.com/@Hamokss">
+          <span>Youtube</span><small>@Hamokss</small>
+        </a>
+        <a class="link" href="mailto:tjancuch@gmail.com">
+          <span>Email</span><small>tjancuch@gmail.com</small>
+        </a>
+      </nav>
+    </aside>
 
-        <aside>
-            <h2>Creator: Hamoks</h2>
-            <ul>
-                <li>14 y.o.</li>
-                <li>Male</li>
-                <li>profesionaly retarded</li>
-            </ul>
+    <main class="content">
+      <section class="card">
+        <h2>O mne</h2>
+        <p>
+          Fetak zo sczyztna
+        </p>
+      </section>
 
-        </aside>
+      <section class="card">
+        <h2>Prečo je kaňo pedofil</h2>
+        <ul class="list">
+          <li>Dodržiava legálny 200m odstup od škôliek</li>
+          <li>Rajecký maraton 2025</li>
+          <li>Je z klačí</li>
+        </ul>
+      </section>
 
-        <section>
+      <section class="card">
+        <h2>Prečo kasman je mogger</h2>
+        <div class="player">
+            <img class="cover" src="audio/cover.jpg" alt="Obal skladby">
+            <div class="player-main">
+            <p class="track-title">Mogger moggerov, kráľ kráľov</p>
+            <p class="track-artist">Hamoks</p>
+            <div class="player-row">
+                <button class="play-btn" type="button" aria-label="Prehrať">▶</button>
+                <input class="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Pozícia v skladbe">
+                <span class="time">0:00 / 0:00</span>
+            </div>
+            </div>
+            <audio src="audio/kasman.mp3" preload="metadata"></audio>
+        </div>
+    </section>
 
-        </section>
+      <section class="card">
+        <h2>Test reakcie</h2>
+        <p>Klikni na políčko. Počkaj, kým zozelenie, a potom klikaj čo najrýchlejšie.</p>
+        <button id="game" type="button">Klikni a začni</button>
+        <p id="best" aria-live="polite"></p>
+      </section>
+      
+    </main>
 
-        <article>
-            <h2>Did You Know?</h2>
-            <h3>That Hamoks retarded?</h3>
-
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum inventore id blanditiis modi eaque illo similique dolores in alias error est, dolorem non. Fuga libero dicta quo eum ipsum voluptatibus.</p>
-            
-        </article>
-
-    </body>
-
-    <script src="index.js"></script>
+  </div>
+  <script src="main.js"></script>
+</body>
 </html>
