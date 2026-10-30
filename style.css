@@ -1,0 +1,62 @@
+
+body{
+    margin: 0;
+    background: linear-gradient(180deg, hsl(0, 0%, 0%), hsl(0, 0%, 40%));
+}
+
+header{
+    padding: 10px 20px;
+    text-align: center;
+    color: hsl(0, 0%, 75%);
+    
+    margin-bottom: 0px;
+}
+.navbar{
+    margin-bottom: 20px;
+}
+.navbar ul{
+    
+    overflow: hidden;
+    list-style-type: none;
+    background-color: hsl(0, 0%, 0%);
+    padding: 0px;
+    mask-image: 0px;
+    
+    
+}
+.navbar a{
+    padding: 23px 20px;
+    display: block;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+}
+.navbar a:hover{
+    background-color: rgb(19, 19, 19);
+}
+.textnav{
+    padding: 22px 10px; 
+    display:inline-block;
+    font-size: 25px;
+    
+}
+.icon{
+    text-decoration: none;
+    float: right;
+    padding: 0px 10px;
+}
+.icon div{
+    background-color: hsl(0, 0%, 100%);
+    width: 50%;
+    height: 25px;
+    transform: translate(50%, -180%);
+}
+aside{
+    width: 20%;
+    float: left;
+}
+article{
+
+    width: 40%;
+    float: left;
+}
