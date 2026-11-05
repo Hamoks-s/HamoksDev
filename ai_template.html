@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>/* Theme colors */
+
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+
+  --background: #f3f5f9;
+  --panel: #ffffff;
+  --text: #0d1320;
+  --text-muted: #5a6578;
+  --border: #dde3ee;
+  --border-strong: #bcc6d8;
+  --accent: #2f5fd6;
+  --accent-glow: rgba(47, 95, 214, 0.13);
+  --blob-blue: rgba(47, 95, 214, 0.10);
+  --blob-teal: rgba(20, 150, 140, 0.08);
+  --warm-accent: #d97706;
+  --warm-glow: rgba(217, 119, 6, 0.10);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #07090e;
+    --panel: #0b0e15;
+    --text: #e9edf5;
+    --text-muted: #8791a5;
+    --border: #1a202b;
+    --border-strong: #2c3546;
+    --accent: #8fb0ff;
+    --accent-glow: rgba(100, 140, 255, 0.15);
+    --blob-blue: rgba(70, 110, 255, 0.10);
+    --blob-teal: rgba(30, 170, 160, 0.07);
+    --warm-accent: #ffb454;
+    --warm-glow: rgba(255, 160, 60, 0.12);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --background: #07090e;
+  --panel: #0b0e15;
+  --text: #e9edf5;
+  --text-muted: #8791a5;
+  --border: #1a202b;
+  --border-strong: #2c3546;
+  --accent: #8fb0ff;
+  --accent-glow: rgba(100, 140, 255, 0.15);
+  --blob-blue: rgba(70, 110, 255, 0.10);
+  --blob-teal: rgba(30, 170, 160, 0.07);
+  --warm-accent: #ffb454;
+  --warm-glow: rgba(255, 160, 60, 0.12);
+
+  color-scheme: dark;
+}
+
+
+/* Base */
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font: 16px/1.6 "Space Grotesk", system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.svg-sprite {
+  position: absolute;
+}
+
+#scroll-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 48px;
+  pointer-events: none;
+}
+
+.hero,
+main,
+footer {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* Background */
+
+.ambient-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* The blobs used to float around, but that was heavy for the GPU, so they stay still now */
+.blob {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  border-radius: 50%;
+}
+
+.blob-left {
+  left: -300px;
+  top: -200px;
+  background: radial-gradient(circle, var(--blob-blue), transparent 65%);
+}
+
+.blob-right {
+  right: -350px;
+  top: 35%;
+  background: radial-gradient(circle, var(--blob-teal), transparent 65%);
+}
+
+#cursor-glow {
+  position: absolute;
+  left: -330px;
+  top: -330px;
+  width: 660px;
+  height: 660px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.6s;
+  will-change: transform;
+}
+
+#cursor-glow.is-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  #cursor-glow {
+    display: none;
+  }
+}
+
+
+/* Header */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--background);
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 0.45s,
+    border-color 0.45s;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  transition: padding 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* No backdrop-filter here on purpose, blur is slow while scrolling */
+header.is-scrolled {
+  background: color-mix(in srgb, var(--background) 88%, transparent);
+  border-bottom-color: var(--border);
+}
+
+header.is-scrolled .container {
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.logo-suffix {
+  color: var(--accent);
+}
+
+.logo-cursor {
+  color: var(--warm-accent);
+  animation: blink 1.2s steps(1) infinite;
+}
+
+nav {
+  display: flex;
+  gap: 26px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+nav a:hover,
+nav a.is-active {
+  color: var(--text);
+}
+
+nav a.is-active {
+  box-shadow: 0 2px 0 var(--accent);
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+
+/* Hero */
+
+.hero {
+  --header-height: 72px;
+  /* 100vh first, then 100svh for browsers that know it (better on phones) */
+  min-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  min-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  padding: var(--header-height) 0 84px;
+  display: flex;
+  align-items: center;
+}
+
+.hero .container {
+  width: 100%;
+  text-align: center;
+}
+
+.hero h1 {
+  /* Flex centering lets a title wider than the container spill out evenly on both sides */
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  font-size: 150px;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  font-weight: 700;
+}
+
+.title-mask {
+  display: block;
+  flex: none;
+  overflow: hidden;
+  padding: 0.1em 0 0.08em;
+  margin: -0.1em 0 -0.08em;
+}
+
+.title-text {
+  display: block;
+  white-space: nowrap;
+  animation: title-rise 0.95s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes title-rise {
+  from { transform: translateY(112%); }
+  to   { transform: none; }
+}
+
+.hero-tagline {
+  margin: 50px 0 0;
+  min-height: 1.6em;
+  font-size: clamp(1.1rem, 2.6vw, 1.6rem);
+  color: var(--text);
+}
+
+.hero-tagline::after,
+.tagline-typed::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 4px;
+  vertical-align: -0.12em;
+  background: var(--accent);
+  animation: blink 1s steps(1) infinite;
+}
+
+/* While typing, the cursor sits at the end of the typed part instead */
+.hero-tagline.is-typing::after {
+  display: none;
+}
+
+.tagline-hidden {
+  visibility: hidden;
+}
+
+.scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  translate: -50% 0;
+  width: 100%;
+  max-width: 1040px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.scroll-hint:hover {
+  color: var(--text);
+}
+
+.scroll-hint-mouse {
+  flex: none;
+  width: 20px;
+  height: 32px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 12px;
+  position: relative;
+}
+
+.scroll-hint-mouse::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 3px;
+  height: 6px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--text);
+  animation: mouse-wheel 1.8s ease-in-out infinite;
+}
+
+@keyframes mouse-wheel {
+  0%   { opacity: 0; transform: translateY(0); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(12px); }
+}
+
+.scroll-hint-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-strong);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-hint-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 22%;
+  background: linear-gradient(90deg, transparent, var(--text), transparent);
+  animation: line-run 2.8s ease-in-out infinite;
+}
+
+@keyframes line-run {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(450%); }
+}
+
+.scroll-hint-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-hint-label b {
+  font-weight: 400;
+  color: var(--text);
+}
+
+.scroll-hint-label .icon {
+  rotate: 135deg;
+  animation: arrow-bob 1.6s ease-in-out infinite;
+}
+
+@keyframes arrow-bob {
+  50% { translate: 3px 3px; }
+}
+
+
+/* Sections */
+
+section {
+  padding: 60px 0 20px;
+}
+
+.section-heading {
+  margin-bottom: 26px;
+}
+
+.section-heading h2 {
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  margin: 0;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.section-heading p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+}
+
+/* Reveal items start hidden and main.js adds is-visible when they scroll in */
+.js-enabled .reveal {
+  opacity: 0;
+  translate: 0 28px;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 0.8s var(--reveal-delay, 0s),
+    translate 0.8s var(--reveal-delay, 0s) cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+
+/* Project cards */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding-bottom: 100px;
+}
+
+.project-grid > .project-card:nth-child(even) {
+  top: 100px;
+}
+
+@media (max-width: 700px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+    padding-bottom: 0;
+  }
+
+  .project-grid > .project-card:nth-child(even) {
+    top: 0;
+  }
+}
+
+.project-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: 24px;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  contain: layout;
+}
+
+/* The shadow shows up instantly. Fading a big blurred shadow is slow. */
+.project-card:hover,
+.project-card:focus-visible {
+  box-shadow: 0 26px 50px -22px rgba(0, 0, 0, 0.85);
+}
+
+.card-art {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.project-card:hover .card-art,
+.project-card:focus-visible .card-art {
+  transform: scale(1.1);
+}
+
+.card-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+/* Dark fade at the bottom so the text is easy to read */
+.project-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.05) 70%);
+}
+
+/* Fixed highlight on hover. It only changes opacity, so it is cheap. */
+.project-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 70% 25%, rgba(255, 255, 255, 0.2), transparent 60%);
+  transition: opacity 0.3s;
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+.card-arrow {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.22);
+  opacity: 0;
+  transform: translate(-8px, 8px) scale(0.7);
+  transition:
+    opacity 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.project-card:hover .card-arrow,
+.project-card:focus-visible .card-arrow {
+  opacity: 1;
+  transform: none;
+}
+
+.card-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 26px 28px;
+  z-index: 3;
+}
+
+.card-info h3 {
+  margin: 0;
+  font-size: 1.7rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+/* Grid row going from 0fr to 1fr is how the description slides open */
+.card-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card-details-inner {
+  overflow: hidden;
+}
+
+.card-details p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.project-card:hover .card-details,
+.project-card:focus-visible .card-details {
+  grid-template-rows: 1fr;
+}
+
+.card-tags {
+  margin-top: 10px;
+}
+
+.card-tags span {
+  display: inline-block;
+  font-size: 0.74rem;
+  padding: 1px 10px;
+  margin: 0 5px 0 0;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Phones have no hover, so always show the description and the arrow */
+@media (hover: none) {
+  .card-details {
+    grid-template-rows: 1fr;
+  }
+
+  .card-arrow {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.card-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 3;
+  font-size: 0.8rem;
+  padding: 3px 12px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.art-blue  { background: linear-gradient(135deg, #0f2a63, #2c6bd1); }
+.art-teal  { background: linear-gradient(135deg, #0b3f45, #1fa5a0); }
+.art-red   { background: linear-gradient(135deg, #4a1030, #d9553a); }
+.art-amber { background: linear-gradient(135deg, #4a3a0c, #d08a1c); }
+.art-green { background: linear-gradient(135deg, #0d3324, #2fb67a); }
+.art-royal {
+  background:
+    radial-gradient(circle at 80% 20%, #3b7bff, transparent 55%),
+    linear-gradient(135deg, #08142e, #1a46a8);
+}
+
+
+/* "Coming next" panel */
+
+.coming-next {
+  padding-top: 100px;
+}
+
+/* The outer box is only 1.5px bigger than the inner one, so it looks like a border.
+   A light spins behind it, and you only see it in that thin gap. */
+.glow-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 1.5px;
+  background: var(--border);
+}
+
+/* Square must stay big enough to cover the panel while it rotates (700px for narrow phones) */
+.glow-panel::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(120%, 700px);
+  aspect-ratio: 1 / 1;
+  translate: -50% -50%;
+  background: conic-gradient(from 0deg, transparent 0 60%, var(--warm-accent) 82%, transparent 100%);
+  animation: border-spin 7s linear infinite;
+}
+
+@keyframes border-spin {
+  to { rotate: 360deg; }
+}
+
+.glow-panel-inner {
+  position: relative;
+  border-radius: 22.5px;
+  padding: 6px 30px;
+  background:
+    radial-gradient(640px circle at 0% 0%, var(--warm-glow), transparent 60%),
+    var(--panel);
+}
+
+.status-row {
+  display: grid;
+  grid-template-columns: 1fr minmax(180px, 300px);
+  gap: 20px 40px;
+  align-items: center;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.status-row:last-child {
+  border-bottom: 0;
+}
+
+.status-row h3 {
+  margin: 0;
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.status-row p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.status.is-live {
+  color: var(--text);
+}
+
+.status-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+
+.status.is-live .status-dot {
+  background: var(--warm-accent);
+}
+
+/* Pulse uses transform and opacity only, animating box-shadow was repainting every frame */
+.status.is-live .status-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--warm-accent);
+  animation: dot-pulse 1.8s infinite;
+}
+
+@keyframes dot-pulse {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: var(--progress);
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--warm-accent), #ff7a59);
+  transition: width 1.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transform: translateX(-100%);
+  animation: bar-shine 2.6s ease-in-out infinite;
+}
+
+@keyframes bar-shine {
+  to { transform: translateX(100%); }
+}
+
+/* Bars start empty and grow when the row scrolls into view */
+.js-enabled .progress-fill {
+  width: 0;
+}
+
+.js-enabled .status-row.is-visible .progress-fill {
+  width: var(--progress);
+}
+
+.progress-percent {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .status-row {
+    grid-template-columns: 1fr;
+  }
+
+  .glow-panel-inner {
+    padding: 2px 20px;
+  }
+}
+
+
+/* Footer */
+
+footer {
+  margin-top: 110px;
+  padding-top: 64px;
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+  border-top: 1px solid var(--border);
+}
+
+footer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+footer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 140px;
+  pointer-events: none;
+  background: radial-gradient(60% 100% at 50% 0%, var(--accent-glow), transparent);
+}
+
+.footer-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 36px;
+}
+
+.footer-grid h4 {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.footer-grid a {
+  display: block;
+  width: fit-content;
+  padding: 4px 0;
+  color: var(--text-muted);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.footer-grid a:hover {
+  color: var(--text);
+  transform: translateX(3px);
+}
+
+.footer-grid .logo {
+  color: var(--text);
+  padding: 0;
+}
+
+.footer-grid p {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  max-width: 30ch;
+}
+
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 56px;
+  padding: 22px 0 30px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.footer-bottom a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-bottom a:hover {
+  color: var(--text);
+}
+
+.footer-bottom .icon {
+  transform: rotate(-45deg);
+}
+
+@media (max-width: 760px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-grid > div:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* Mobile menu (only shown on small screens, see the media query below) */
+
+.menu-button,
+.menu-close {
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.menu-button {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.menu-close {
+  display: flex;
+}
+
+.menu-button:focus-visible,
+.menu-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.menu-button-line {
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.menu-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s, visibility 0s 0.4s;
+}
+
+.menu-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s;
+}
+
+/* visibility: hidden also stops the closed menu from being focused with Tab */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 31;
+  width: min(320px, 82vw);
+  padding: calc(20px + env(safe-area-inset-top, 0px)) 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  background:
+    radial-gradient(420px circle at 0% 0%, var(--accent-glow), transparent 60%),
+    var(--panel);
+  border-right: 1px solid var(--border);
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s 0.4s;
+}
+
+.mobile-menu.is-open {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  margin-top: 28px;
+}
+
+.mobile-menu-links a {
+  padding: 12px 0;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+
+.mobile-menu-links a::before {
+  content: "// ";
+  color: var(--warm-accent);
+}
+
+.mobile-menu-links a:hover {
+  color: var(--accent);
+}
+
+.mobile-menu-footer {
+  margin: 32px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+
+/* Phones */
+
+@media (max-width: 700px) {
+  nav {
+    display: none;
+  }
+
+  .menu-button {
+    display: flex;
+  }
+
+  .menu-backdrop,
+  .mobile-menu {
+    display: block;
+  }
+
+  /* No sticky header on phones, it scrolls away with the page.
+     The "scrolled" look is turned off so it does not change while leaving the screen. */
+  header {
+    position: absolute;
+  }
+
+  header.is-scrolled {
+    background: var(--background);
+    border-bottom-color: transparent;
+  }
+
+  header.is-scrolled .container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  /* Stops the page from scrolling behind the open menu */
+  body.menu-is-open {
+    overflow: hidden;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.8rem, min(21vw, 15vh), 7rem);
+  }
+
+  .title-word {
+    display: block;
+  }
+}
+
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js-enabled .reveal {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+
+/* These two rules switch off the card zoom and the fade-in on scroll.
+   They win over everything above, so delete them if you want those effects back. */
+
+.project-card:hover .card-art,
+.project-card:focus-visible .card-art {
+  transform: none;
+}
+
+.js-enabled .reveal {
+  opacity: 1 !important;
+  translate: none !important;
+  transition: none !important;
+}</style>
+</head>
+
+<body id="top">
+
+  <!-- The arrow icon is defined once here and reused with <use> -->
+  <svg class="svg-sprite" width="0" height="0" aria-hidden="true">
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  </svg>
+
+  <!-- The CSS needs this class to know it can hide things before animating them -->
+  <script>
+    document.documentElement.classList.add('js-enabled');
+  </script>
+
+  <div id="scroll-sentinel"></div>
+
+  <div class="ambient-background" aria-hidden="true">
+    <div class="blob blob-left"></div>
+    <div class="blob blob-right"></div>
+    <div id="cursor-glow"></div>
+  </div>
+
+
+  <header>
+    <div class="container">
+      <a class="logo" href="#top">Hamoks<span class="logo-suffix">.dev</span><span class="logo-cursor">_</span></a>
+      <nav>
+        <a class="is-active" href="#projects">Projekty</a>
+        <a href="#">O mne</a>
+        <a href="#contact">Kontakt</a>
+      </nav>
+
+      <button class="menu-button" id="menu-button" type="button" aria-label="Otvoriť menu" aria-controls="mobile-menu" aria-expanded="false">
+        <span class="menu-button-line"></span>
+        <span class="menu-button-line"></span>
+        <span class="menu-button-line"></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="menu-backdrop" id="menu-backdrop"></div>
+
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu">
+    <button class="menu-close" id="menu-close" type="button" aria-label="Zavrieť menu">
+      <svg class="icon"><use href="#icon-close"/></svg>
+    </button>
+
+    <div class="mobile-menu-links">
+      <a href="#top">domov</a>
+      <a href="#projects">projekty</a>
+      <a href="#">o mne</a>
+      <a href="#contact">kontakt</a>
+    </div>
+
+    <p class="mobile-menu-footer">© 2026 Hamoks. Všetky práva vyhradené.</p>
+  </div>
+
+
+  <section class="hero">
+    <div class="container">
+      <h1><span class="title-mask"><span class="title-text"><span class="title-word">Tomáš</span> <span class="title-word">Jančúch</span></span></span></h1>
+      <p class="hero-tagline" id="tagline" data-text="Píšem kód, ktorý väčšinou funguje.">Píšem kód, ktorý väčšinou funguje.</p>
+    </div>
+
+    <a class="scroll-hint" href="#projects">
+      <span class="scroll-hint-mouse"></span>
+      <span class="scroll-hint-line"></span>
+      <span class="scroll-hint-label">
+        <b id="project-count">6 projektov</b>
+        <svg class="icon"><use href="#icon-arrow"/></svg>
+      </span>
+    </a>
+  </section>
+
+
+  <main class="container">
+
+    <section id="projects">
+      <div class="section-heading reveal">
+        <h2>Projekty</h2>
+        <p>Klikni na ten, ktorý ťa zaujme.</p>
+      </div>
+
+      <div class="project-grid">
+
+        <a class="project-card reveal" href="#">
+          <span class="card-art art-royal"></span>
+          <span class="card-badge">Najnovší</span>
+          <span class="card-arrow"><svg class="icon"><use href="#icon-arrow"/></svg></span>
+          <div class="card-info">
+            <h3>Pixel Notes</h3>
+            <div class="card-details"><div class="card-details-inner"><p>Aplikácia na poznámky v štýle 8-bitových hier.</p></div></div>
+            <div class="card-tags"><span>JavaScript</span><span>Web</span></div>
+          </div>
+        </a>
+
+        <a class="project-card reveal" style="--reveal-delay: .05s" href="#">
+          <span class="card-art art-blue"></span>
+          <span class="card-arrow"><svg class="icon"><use href="#icon-arrow"/></svg></span>
+          <div class="card-info">
+            <h3>Weather CLI</h3>
+            <div class="card-details"><div class="card-details-inner"><p>Predpoveď počasia priamo v termináli.</p></div></div>
+            <div class="card-tags"><span>Python</span><span>CLI</span></div>
+          </div>
+        </a>
+
+        <a class="project-card reveal" style="--reveal-delay: .15s" href="#">
+          <span class="card-art art-teal"></span>
+          <span class="card-arrow"><svg class="icon"><use href="#icon-arrow"/></svg></span>
+          <div class="card-info">
+            <h3>Name Day API</h3>
+            <div class="card-details"><div class="card-details-inner"><p>Slovenský kalendár mien ako jednoduché API.</p></div></div>
+            <div class="card-tags"><span>API</span><span>Node</span></div>
+          </div>
+        </a>
+
+        <a class="project-card reveal" style="--reveal-delay: .25s" href="#">
+          <span class="card-art art-amber"></span>
+          <span class="card-arrow"><svg class="icon"><use href="#icon-arrow"/></svg></span>
+          <div class="card-info">
+            <h3>Study Timer</h3>
+            <div class="card-details"><div class="card-details-inner"><p>Časovač na učenie so štatistikami.</p></div></div>
+            <div class="card-tags"><span>HTML</span><span>CSS</span></div>
+          </div>
+        </a>
+
+        <a class="project-card reveal" style="--reveal-delay: .1s" href="#">
+          <span class="card-art art-red"></span>
+          <span class="card-arrow"><svg class="icon"><use href="#icon-arrow"/></svg></span>
+          <div class="card-info">
+            <h3>Quiz Master</h3>
+            <div class="card-details"><div class="card-details-inner"><p>Kvíz na precvičovanie učiva.</p></div></div>
+            <div class="card-tags"><span>JavaScript</span><span>Hra</span></div>
+          </div>
+        </a>
+
+        <a class="project-card reveal" style="--reveal-delay: .2s" href="#">
+          <span class="card-art art-green"></span>
+          <span class="card-arrow"><svg class="icon"><use href="#icon-arrow"/></svg></span>
+          <div class="card-info">
+            <h3>Link Shortener</h3>
+            <div class="card-details"><div class="card-details-inner"><p>Skracovač odkazov s počítadlom kliknutí.</p></div></div>
+            <div class="card-tags"><span>Node</span><span>Web</span></div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+
+    <section class="coming-next">
+      <div class="section-heading reveal">
+        <h2>Čo príde ďalej</h2>
+        <p>Na čom práve pracujem.</p>
+      </div>
+
+      <div class="glow-panel reveal">
+        <div class="glow-panel-inner">
+
+          <!-- --progress is the width the bar fills up to -->
+          <div class="status-row" style="--progress: 40%">
+            <div>
+              <h3>Budget Tracker</h3>
+              <p>Aplikácia na sledovanie výdavkov pre študentov.</p>
+            </div>
+            <div>
+              <div class="status is-live"><i class="status-dot"></i>Vo vývoji</div>
+              <div class="progress-bar"><b class="progress-fill"></b></div>
+              <span class="progress-percent">40 %</span>
+            </div>
+          </div>
+
+          <div class="status-row" style="--progress: 10%">
+            <div>
+              <h3>Name Day API v2</h3>
+              <p>Nová verzia s lepšou dokumentáciou.</p>
+            </div>
+            <div>
+              <div class="status"><i class="status-dot"></i>Plánované</div>
+              <div class="progress-bar"><b class="progress-fill"></b></div>
+              <span class="progress-percent">10 %</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="logo" href="#top">Hamoks<span class="logo-suffix">.dev</span><span class="logo-cursor">_</span></a>
+          <p>Moje projekty a experimenty na jednom mieste.</p>
+        </div>
+        <div>
+          <h4>Stránky</h4>
+          <a href="#projects">Projekty</a>
+          <a href="#">O mne</a>
+        </div>
+        <div>
+          <h4>Sociálne siete</h4>
+          <a href="#">GitHub</a>
+          <a href="#">Instagram</a>
+          <a href="#">Discord</a>
+        </div>
+        <div>
+          <h4>Kontakt</h4>
+          <a href="mailto:ahoj@hamoks.dev">ahoj@hamoks.dev</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Hamoks</span>
+        <a href="#top">Späť hore<svg class="icon"><use href="#icon-arrow"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>const prefers_reduced_motion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+
+// Cursor glow
+
+const cursor_glow = document.getElementById('cursor-glow');
+
+let mouse_x = 0;
+let mouse_y = 0;
+let glow_x = 0;
+let glow_y = 0;
+let glow_is_moving = false;
+
+// Moves the glow a bit closer to the mouse on every frame.
+// That is why it lags behind a little.
+function move_glow() {
+    glow_x = glow_x + (mouse_x - glow_x) * 0.14;
+    glow_y = glow_y + (mouse_y - glow_y) * 0.14;
+
+    cursor_glow.style.transform = 'translate3d(' + glow_x + 'px, ' + glow_y + 'px, 0)';
+
+    const distance_left = Math.abs(mouse_x - glow_x) + Math.abs(mouse_y - glow_y);
+
+    if (distance_left > 0.5) {
+        requestAnimationFrame(move_glow);
+    } else {
+        glow_is_moving = false;
+    }
+}
+
+function on_mouse_move(event) {
+    if (event.pointerType !== 'mouse') {
+        return;
+    }
+
+    // On the first move, put the glow right under the mouse and show it
+    if (!cursor_glow.classList.contains('is-visible')) {
+        glow_x = event.clientX;
+        glow_y = event.clientY;
+        cursor_glow.classList.add('is-visible');
+    }
+
+    mouse_x = event.clientX;
+    mouse_y = event.clientY;
+
+    if (!glow_is_moving) {
+        glow_is_moving = true;
+        requestAnimationFrame(move_glow);
+    }
+}
+
+if (!prefers_reduced_motion) {
+    window.addEventListener('pointermove', on_mouse_move, { passive: true });
+}
+
+
+// Project count in the hero
+
+const project_cards = document.querySelectorAll('.project-card');
+const project_count_label = document.getElementById('project-count');
+
+if (project_count_label) {
+    const count = project_cards.length;
+    let word = '';
+
+    // Slovak plural: 1 projekt, 2-4 projekty, everything else projektov
+    if (count === 1) {
+        word = 'projekt';
+    } else if (count >= 2 && count <= 4) {
+        word = 'projekty';
+    } else {
+        word = 'projektov';
+    }
+
+    project_count_label.textContent = count + ' ' + word;
+}
+
+
+// Header shrinks after scrolling
+
+const header = document.querySelector('header');
+const scroll_sentinel = document.getElementById('scroll-sentinel');
+
+function on_sentinel_change(entries) {
+    const is_at_top = entries[0].isIntersecting;
+    header.classList.toggle('is-scrolled', !is_at_top);
+}
+
+function on_scroll() {
+    header.classList.toggle('is-scrolled', window.scrollY > 40);
+}
+
+if ('IntersectionObserver' in window) {
+    const header_observer = new IntersectionObserver(on_sentinel_change);
+    header_observer.observe(scroll_sentinel);
+} else {
+    window.addEventListener('scroll', on_scroll, { passive: true });
+}
+
+
+// Typing effect for the tagline
+
+const tagline = document.getElementById('tagline');
+let tagline_text = '';
+let typed_part = null;
+let hidden_part = null;
+let letters_typed = 0;
+
+function type_next_letter() {
+    letters_typed = letters_typed + 1;
+    typed_part.textContent = tagline_text.slice(0, letters_typed);
+    hidden_part.textContent = tagline_text.slice(letters_typed);
+
+    if (letters_typed < tagline_text.length) {
+        // random delay so it does not look like a machine
+        const delay = 48 + Math.random() * 55;
+        setTimeout(type_next_letter, delay);
+    }
+}
+
+if (tagline && !prefers_reduced_motion) {
+    tagline_text = tagline.dataset.text;
+    tagline.textContent = '';
+    tagline.classList.add('is-typing');
+
+    // The text is centered, so the letters that are not typed yet stay in the line
+    // as invisible text. Without it the line would jump left on every new letter.
+    typed_part = document.createElement('span');
+    typed_part.className = 'tagline-typed';
+    hidden_part = document.createElement('span');
+    hidden_part.className = 'tagline-hidden';
+    hidden_part.textContent = tagline_text;
+
+    tagline.appendChild(typed_part);
+    tagline.appendChild(hidden_part);
+
+    // wait for the title animation to finish first
+    setTimeout(type_next_letter, 900);
+}
+
+
+// Show things when they scroll into view
+
+const reveal_items = document.querySelectorAll('.reveal, .status-row');
+
+function on_items_visible(entries, observer) {
+    entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}
+
+if ('IntersectionObserver' in window) {
+    const reveal_observer = new IntersectionObserver(on_items_visible, { threshold: 0.2 });
+
+    reveal_items.forEach(function (item) {
+        reveal_observer.observe(item);
+    });
+} else {
+    reveal_items.forEach(function (item) {
+        item.classList.add('is-visible');
+    });
+}
+
+
+// Mobile menu
+
+const menu_button = document.getElementById('menu-button');
+const menu_close_button = document.getElementById('menu-close');
+const menu_backdrop = document.getElementById('menu-backdrop');
+const mobile_menu = document.getElementById('mobile-menu');
+const mobile_menu_links = mobile_menu.querySelectorAll('a');
+const phone_screen = window.matchMedia('(max-width: 700px)');
+
+function open_menu() {
+    mobile_menu.classList.add('is-open');
+    menu_backdrop.classList.add('is-open');
+    document.body.classList.add('menu-is-open');
+    menu_button.setAttribute('aria-expanded', 'true');
+    menu_close_button.focus();
+}
+
+function close_menu() {
+    if (!mobile_menu.classList.contains('is-open')) {
+        return;
+    }
+
+    mobile_menu.classList.remove('is-open');
+    menu_backdrop.classList.remove('is-open');
+    document.body.classList.remove('menu-is-open');
+    menu_button.setAttribute('aria-expanded', 'false');
+    menu_button.focus();
+}
+
+function on_key_down(event) {
+    if (event.key === 'Escape') {
+        close_menu();
+    }
+}
+
+function on_screen_size_change() {
+    // The menu does not exist on bigger screens, so make sure it is not left open
+    if (!phone_screen.matches) {
+        close_menu();
+    }
+}
+
+menu_button.addEventListener('click', open_menu);
+menu_close_button.addEventListener('click', close_menu);
+menu_backdrop.addEventListener('click', close_menu);
+document.addEventListener('keydown', on_key_down);
+phone_screen.addEventListener('change', on_screen_size_change);
+
+mobile_menu_links.forEach(function (link) {
+    link.addEventListener('click', close_menu);
+});</script>
+</body>
+</html>

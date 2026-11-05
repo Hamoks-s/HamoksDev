@@ -1,83 +1,25 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tvoje Meno</title>
-  <meta name="description" content="Osobná stránka: Tvoje Meno">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hamoks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="wrap">
 
-    <aside class="side">
-      <div class="avatar" aria-hidden="true">HM</div>
-      <h1>Hamoks</h1>
-      <p class="tagline">Študent zo Slovenska. Väčšinou programujem, občas riešim aj iné blbosti.</p>
+    <header>
+        <a href="https://hamoks.dev">Hamoks.dev</a>
+        <nav>
+            <a>Projekty</a>
+            <a>O Mne</a>
+            <a>Kontakt</a>
+        </nav>
+        
+    </header>
 
-      <nav class="links" aria-label="Moje odkazy">
-        <a class="link" href="https://github.com/Hamoks-s">
-          <span>GitHub</span><small>@Hamoks-s</small>
-        </a>
-        <a class="link" href="https://www.instagram.com/_hamoks_/">
-          <span>Instagram</span><small>@_hamoks_</small>
-        </a>
-        <a class="link" href="https://discord.com/users/Hamoks">
-          <span>Discord</span><small>Hamoks</small>
-        </a>
-         <a class="link" href="https://www.youtube.com/@Hamokss">
-          <span>Youtube</span><small>@Hamokss</small>
-        </a>
-        <a class="link" href="mailto:tjancuch@gmail.com">
-          <span>Email</span><small>tjancuch@gmail.com</small>
-        </a>
-      </nav>
-    </aside>
-
-    <main class="content">
-      <section class="card">
-        <h2>O mne</h2>
-        <p>
-          Fetak zo sczyztna
-        </p>
-      </section>
-
-      <section class="card">
-        <h2>Prečo je kaňo pedofil</h2>
-        <ul class="list">
-          <li>Dodržiava legálny 200m odstup od škôliek</li>
-          <li>Rajecký maraton 2025</li>
-          <li>Je z klačí</li>
-        </ul>
-      </section>
-
-      <section class="card">
-        <h2>Prečo kasman je mogger</h2>
-        <div class="player">
-            <img class="cover" src="audio/cover.jpg" alt="Obal skladby">
-            <div class="player-main">
-            <p class="track-title">Mogger moggerov, kráľ kráľov</p>
-            <p class="track-artist">Hamoks</p>
-            <div class="player-row">
-                <button class="play-btn" type="button" aria-label="Prehrať">▶</button>
-                <input class="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Pozícia v skladbe">
-                <span class="time">0:00 / 0:00</span>
-            </div>
-            </div>
-            <audio src="audio/kasman.mp3" preload="metadata"></audio>
-        </div>
-    </section>
-
-      <section class="card">
-        <h2>Test reakcie</h2>
-        <p>Klikni na políčko. Počkaj, kým zozelenie, a potom klikaj čo najrýchlejšie.</p>
-        <button id="game" type="button">Klikni a začni</button>
-        <p id="best" aria-live="polite"></p>
-      </section>
-      
-    </main>
-
-  </div>
-  <script src="main.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
