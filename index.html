@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="sk" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,16 +9,50 @@
 </head>
 
 <body>
+    <svg class="svg-sprite" width="0" height="0" aria-hidden="true">
+        <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    </svg>
+
+    <div id="ambient-background">
+        <div class="blob blob-left"></div>
+        <div class="blob blob-right"></div>
+    </div>
 
     <header>
-        <a href="https://hamoks.dev">Hamoks.dev</a>
+        
+        <a class="logo" href="https://hamoks.dev">
+            Hamoks<span class="logo-suffix">.dev</span><span class="logo-cursor">_</span>
+        </a>
         <nav>
-            <a>Projekty</a>
-            <a>O Mne</a>
-            <a>Kontakt</a>
         </nav>
+
+        <button id="menu-button">
+            <span class="menu-button-line"></span>
+            <span class="menu-button-line"></span>
+            <span class="menu-button-line"></span>
+        </button>
         
     </header>
+
+    <section id="hero">
+
+        <div class="container">
+            <h1><span class="title-mask"><span class="title-text"><span class="title-word">Tomáš</span> <span class="title-word">Jančúch</span></span></span></h1>
+            <p class="hero-tagline is-typing" id="tagline" data-text="IT Študent | Full Stack Developer"><span class="tagline-typed">IT Študent | Full Stack Developer</span><span class="tagline-hidden"></span></p>
+        </div>
+
+        <a class="scroll-hint" href="#projects">
+            <span class="scroll-hint-mouse"></span>
+            <span class="scroll-hint-line"></span>
+            <span class="scroll-hint-label">
+                <b id="project-count">6 projektov</b>
+                <svg class="icon"><use href="#icon-arrow"></use></svg>
+            </span>
+        </a>
+  
+    </section>
+    
 
 <script src="main.js"></script>
 </body>
