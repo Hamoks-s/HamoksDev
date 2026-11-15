@@ -299,6 +299,7 @@ body.menu-is-open {
 
 #hero {
   min-height: 100vh;
+  min-height: 100svh;
   width: 100vw;
   padding: 84px 0 84px;
   display: flex;
