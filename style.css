@@ -810,10 +810,9 @@ footer::after {
   padding: 0;
 }
 
-.logo {
-  font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: -0.02em;
+#footer-logo-img {
+  position: absolute;
+  left: 150px;
 }
 
 .footer-bottom {
