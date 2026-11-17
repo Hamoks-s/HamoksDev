@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Hamoks</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" type="image/png" href="images/logo/favicon_32.png">
 </head>
 
 <body>
-    <svg class="svg-sprite" width="0" height="0" aria-hidden="true">
-        <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
-        <symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
-    </svg>
+    
 
     <div id="ambient-background">
         <div class="blob blob-left"></div>
@@ -24,7 +21,7 @@
     <script src="templates/header.js"></script>
 
     <dialog id="mobile-menu"></dialog>
-    <script src="templates/mobile_menu.js"></script>
+    <script src="templates/mobile-menu.js"></script>
 
     <section id="hero">
 
@@ -52,15 +49,15 @@
                 <h2>Projekty</h2>
             </div>
             <div class="project-grid">
-                <a class="project-card" href="https://kruzky.ssosza.sk/">
+                <a class="project-card" href="/projects/ssosza-kruzky.html">
                     <div>
-                        <img class="project-image" src="images/ssosza_kruzky.png" alt="Screenshot of Ssosza kruzky">
+                        <img class="project-image" src="images/ssosza-kruzky.png" alt="Screenshot of Ssosza kruzky">
                     </div>
                     
                     <div class="project-info">
                         <h3>SSOSZA Kruzky</h3>
                         <p class="project-subtext">Stránka na zaregistrovanie sa na školské krúžky.</p>
-                        <p class="show-project">Ukázať Projekt</p>
+                        <p class="show-project">Ukázať Projekt <svg class="icon"><use href="#icon-arrow"></use></svg></p>
                         <div class="project-tags">
                             <span>Web</span>
                             <span>Node.js</span>
@@ -99,6 +96,7 @@
     
     <footer id="footer"></footer>
     <script src="templates/footer.js"></script>
-<script src="main.js"></script>
+    <script src="js/mobile-menu-function.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="sk" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSOSZA Krúžky | Hamoks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/article.css">
+    <link rel="icon" type="image/png" href="/images/logo/favicon_32.png">
+</head>
+<body>
+    <div class="reading-progress" id="reading-progress"></div>
+
+    <div id="ambient-background">
+        <div class="blob blob-left"></div>
+        <div class="blob blob-right"></div>
+    </div>
+
+    <header id="header"></header>
+    <script src="/templates/header.js"></script>
+
+    <dialog id="mobile-menu"></dialog>
+    <script src="/templates/mobile-menu.js"></script>
+
+    <!-- left side: back button and table of contents, the table of contents fills itself from the h2 headings -->
+    <div class="rail">
+        <a class="back-button" href="/#projects" aria-label="Späť na projekty" title="Späť na projekty">
+            <svg class="icon"><use href="#icon-arrow"></use></svg>
+        </a>
+        <aside class="article-toc">
+            <h4 class="label">Obsah</h4>
+            <div id="toc-list"></div>
+        </aside>
+    </div>
+
+    <main class="article">
+
+        <!-- top of the article -->
+        <div class="article-hero">
+            <h1 class="article-title">SSOSZA Krúžky</h1>
+            <p class="article-lead">Stránka na zaregistrovanie sa na školské krúžky.</p>
+
+            <div class="project-tags">
+                <span>Web</span>
+                <span>Node.js</span>
+                <span>MySQL</span>
+            </div>
+
+            <div class="article-meta">
+                <div class="meta-item">
+                    <span class="label">Rola</span>
+                    <span class="meta-value">Full stack vývoj</span>
+                </div>
+                <div class="meta-line"></div>
+                <div class="meta-item">
+                    <span class="label">Rok</span>
+                    <span class="meta-value">2026</span>
+                </div>
+            </div>
+
+            <div class="article-links">
+                <a class="link-button" href="#">Pozrieť web <svg class="icon"><use href="#icon-arrow"></use></svg></a>
+                <a class="link-button link-button-outline" href="https://github.com/Hamoks-s">GitHub <svg class="icon"><use href="#icon-arrow"></use></svg></a>
+            </div>
+        </div>
+
+        <figure class="article-cover">
+            <img src="/images/ssosza-kruzky.png" alt="Screenshot of Ssosza kruzky">
+        </figure>
+
+        <!--
+            CONTENT
+            The table of contents is made from the h2 headings.
+            A shorter name in the table of contents: <h2 data-toc="Krátky názov">
+            Every block below works on its own. Copy it, change the text and put it wherever you want.
+        -->
+        <article class="article-body">
+
+            <!-- BLOK: nadpis sekcie (ide do obsahu) -->
+            <h2>Prvá sekcia</h2>
+
+            <!-- BLOK: odsek, odkaz v texte -->
+            <p>Bežný text. Čo si postavil, pre koho to je a čo to robí. Odkaz na niečo môžeš dať <a href="#">takto do textu</a>.</p>
+
+            <!-- BLOK: podnadpis (do obsahu nejde) -->
+            <h3>Podnadpis</h3>
+
+            <!-- BLOK: odrážky -->
+            <ul>
+                <li>Prvý bod</li>
+                <li>Druhý bod</li>
+                <li>Tretí bod</li>
+            </ul>
+
+            <h2>Druhá sekcia</h2>
+
+            <!-- BLOK: číslované kroky -->
+            <ol>
+                <li>Prvý krok</li>
+                <li>Druhý krok</li>
+                <li>Tretí krok</li>
+            </ol>
+
+            <!-- BLOK: kód, názvy v texte idú takto: <code>app.post</code> -->
+            <pre><code>app.post("/api/register", (req, res) =&gt; {
+  // sem vlož kód, o ktorom píšeš
+});</code></pre>
+
+            <!-- BLOK: poznámka (oranžová) -->
+            <div class="note">
+                <p>Kratšia poznámka alebo vec, ktorú chceš zvýrazniť.</p>
+            </div>
+
+            <!-- BLOK: tip (modrá, rovnaký blok + trieda note-blue) -->
+            <div class="note note-blue">
+                <p>Tip alebo užitočná informácia.</p>
+            </div>
+
+            <!-- BLOK: obrázok s popisom -->
+            <figure>
+                <img src="/images/ssosza-kruzky.png" alt="Popis obrázka">
+                <figcaption>Popis pod obrázkom</figcaption>
+            </figure>
+
+            <h2 data-toc="Záver">Čo som sa naučil</h2>
+
+            <!-- BLOK: dva obrázky vedľa seba (na mobile pod sebou) -->
+            <div class="figure-pair">
+                <figure>
+                    <img src="/images/ssosza-kruzky.png" alt="Popis prvého obrázka">
+                    <figcaption>Popis 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="/images/ssosza-kruzky.png" alt="Popis druhého obrázka">
+                    <figcaption>Popis 2</figcaption>
+                </figure>
+            </div>
+
+            <p>Čo by si urobil inak.</p>
+        </article>
+
+        <!-- ĎALŠÍ PROJEKT: zmaž celý blok, ak žiadny ďalší nie je -->
+        <div class="article-end">
+            <a class="next-project" href="/projects/dalsi-projekt.html">
+                <div>
+                    <span class="label">Ďalší projekt</span>
+                    <h3>Názov projektu</h3>
+                    <p class="next-sub">Krátky popis ďalšieho projektu.</p>
+                </div>
+                <span class="next-arrow"><svg class="icon"><use href="#icon-arrow"></use></svg></span>
+            </a>
+        </div>
+
+    </main>
+
+    <footer id="footer"></footer>
+    <script src="/templates/footer.js"></script>
+
+    <script src="/js/mobile-menu-function.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/article.js"></script>
+</body>
+</html>

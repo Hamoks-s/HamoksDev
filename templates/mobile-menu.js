@@ -1,7 +1,7 @@
 const menuBox = document.getElementById("mobile-menu");
 
 async function load() {
-    const response = await fetch("/templates/mobile_menu.html");
+    const response = await fetch("/templates/mobile-menu.html");
 
     if (!response.ok) {
         console.error("Could not load the menu");
@@ -10,4 +10,4 @@ async function load() {
     menuBox.outerHTML = await response.text();
 }
 
-load();
+const headerReady = load();

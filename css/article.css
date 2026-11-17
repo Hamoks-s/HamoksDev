@@ -1,0 +1,550 @@
+/*
+  Article page styles, load this file after style.css.
+  Colors, spacing variables, ambient background, header, footer,
+  .icon, .project-tags and the line-run keyframes all come from style.css.
+  Do not use the plain header, footer, nav and section tags inside the article,
+  style.css styles those tags directly.
+*/
+
+.article {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 150px 20px 0;
+  color: var(--color-main-text);
+}
+
+/* small label with the orange dash */
+
+.label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  color: var(--color-text-muted);
+}
+
+.label::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 2px;
+  margin-right: 8px;
+  vertical-align: middle;
+  background: var(--color-warm-accent);
+}
+
+/* left side: back button and table of contents */
+
+.rail {
+  position: absolute;
+  top: 82px;
+  left: 20px;
+  z-index: 5;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-background);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.back-button .icon {
+  width: 22px;
+  height: 22px;
+  transform: rotate(-135deg);
+}
+
+.back-button:hover {
+  background: var(--color-warm-accent);
+  transform: translateX(-3px);
+}
+
+.article-toc {
+  display: none;
+  margin-top: 28px;
+}
+
+.article-toc h4 {
+  margin: 0 0 12px;
+}
+
+.article-toc a {
+  display: block;
+  padding: 6px 0 6px 14px;
+  border-left: 1px solid var(--border-strong);
+  font-size: 0.92rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.article-toc a:hover, .article-toc a.is-active {
+  color: var(--color-main-text);
+}
+
+.article-toc a.is-active {
+  border-left-color: var(--color-accent);
+}
+
+/* top of the article */
+
+.article-hero {
+  animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.article-title {
+  margin: 0;
+  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.article-lead {
+  margin: var(--space-3) 0 0;
+  max-width: 60ch;
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+/* style.css gives .project-tags a smaller margin, here it needs a bit more */
+.article-hero .project-tags {
+  margin-top: var(--space-3);
+}
+
+/* bar with role and year */
+
+.article-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: var(--space-4) var(--space-3);
+  background:
+    radial-gradient(420px circle at 0% 0%, var(--color-accent-glow), transparent 60%),
+    radial-gradient(360px circle at 100% 100%, var(--color-warm-glow), transparent 60%),
+    var(--color-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+}
+
+.meta-value {
+  display: block;
+  margin-top: 6px;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+/* thin line with an orange dot on one end and a blue dot on the other */
+.meta-line {
+  position: relative;
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 3px 50%, var(--color-warm-accent) 3px, transparent 4px),
+    radial-gradient(circle at calc(100% - 3px) 50%, var(--color-accent) 3px, transparent 4px),
+    linear-gradient(var(--border-strong), var(--border-strong)) center / 100% 1px no-repeat;
+}
+
+/* the orange glow that runs along the line, keyframes are in style.css */
+.meta-line::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 0;
+  width: 25%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-warm-accent), transparent);
+  animation: line-run 2.8s ease-in-out infinite;
+}
+
+/* buttons */
+
+.article-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--color-accent);
+  border-radius: 99px;
+  background: var(--color-accent);
+  color: var(--color-background);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.link-button:hover {
+  background: transparent;
+  color: var(--color-accent);
+}
+
+/* has to stay below .link-button so it wins */
+.link-button-outline {
+  border-color: var(--border-strong);
+  background: transparent;
+  color: var(--color-main-text);
+}
+
+.link-button-outline:hover {
+  border-color: var(--color-warm-accent);
+  color: var(--color-warm-accent);
+}
+
+/* cover image */
+
+.article-cover {
+  margin: var(--space-6) 0 0;
+}
+
+.article-cover img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  box-shadow: 0 0 70px -25px var(--color-accent-glow);
+}
+
+/* content blocks, every block works on its own so the order does not matter */
+
+.article-body {
+  margin-top: var(--space-6);
+}
+
+.article-body h2 {
+  margin: var(--space-6) 0 var(--space-2);
+  font-size: var(--text-2xl);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  scroll-margin-top: 100px; /* so the fixed header does not cover it */
+}
+
+/* small blue to orange bar above every h2 */
+.article-body h2::before {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 3px;
+  margin-bottom: 14px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-warm-accent));
+}
+
+.article-body > h2:first-child {
+  margin-top: 0;
+}
+
+.article-body h3 {
+  margin: var(--space-4) 0 var(--space-1);
+  font-size: var(--text-xl);
+  letter-spacing: -0.02em;
+}
+
+.article-body p {
+  max-width: 80ch;
+  margin: 0 0 var(--space-2);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.article-body p a {
+  color: var(--color-accent);
+  box-shadow: 0 1px 0 var(--color-accent);
+  transition: color 0.2s, box-shadow 0.2s;
+}
+
+.article-body p a:hover {
+  color: var(--color-warm-accent);
+  box-shadow: 0 1px 0 var(--color-warm-accent);
+}
+
+.article-body ul, .article-body ol {
+  max-width: 80ch;
+  margin: 0 0 var(--space-2);
+  padding-left: 1.4rem;
+  line-height: 1.8;
+}
+
+.article-body li {
+  margin-bottom: var(--space-1);
+}
+
+.article-body li::marker {
+  color: var(--color-warm-accent);
+}
+
+/* code */
+
+.article-body code {
+  padding: 2px 6px;
+  background: var(--color-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--color-accent);
+}
+
+.article-body pre {
+  margin: var(--space-3) 0;
+  padding: var(--space-2);
+  overflow-x: auto;
+  background: var(--color-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* code inside pre should not look like the small inline code */
+.article-body pre code {
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* orange note and blue tip */
+
+.note {
+  max-width: 80ch;
+  margin: var(--space-3) 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-warm-glow);
+  border-left: 3px solid var(--color-warm-accent);
+  border-radius: 0 6px 6px 0;
+}
+
+.note-blue {
+  background: var(--color-accent-glow);
+  border-left-color: var(--color-accent);
+}
+
+.note p {
+  margin: 0;
+}
+
+/* images */
+
+.article-body figure {
+  margin: var(--space-4) 0;
+}
+
+.article-body figure img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+
+.article-body figcaption {
+  margin-top: 10px;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* two images next to each other, has to stay below the figure rule */
+.figure-pair {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+}
+
+.figure-pair figure {
+  margin: 0;
+}
+
+/* next project */
+
+.article-end {
+  margin-top: var(--space-8);
+}
+
+.next-project {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-3);
+  background:
+    radial-gradient(520px circle at 0% 0%, var(--color-accent-glow), transparent 60%),
+    radial-gradient(420px circle at 100% 100%, var(--color-warm-glow), transparent 60%),
+    var(--color-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  transition: border-color 0.2s;
+}
+
+.next-project:hover {
+  border-color: var(--color-accent);
+}
+
+.next-project h3 {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-2xl);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.next-sub {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-muted);
+}
+
+.next-arrow {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.next-project:hover .next-arrow {
+  background: var(--color-warm-accent);
+  border-color: var(--color-warm-accent);
+  color: var(--color-background);
+  transform: translate(3px, -3px);
+}
+
+/* scroll animations, the classes are added by article.js */
+
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-warm-accent));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* the bar above h2 grows when the heading shows up */
+.article-body h2.reveal::before {
+  width: 0;
+  transition: width 0.7s 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.article-body h2.reveal.is-visible::before {
+  width: 28px;
+}
+
+/* Keyframes */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* desktop version */
+
+@media (min-width: 700px) {
+  .article-meta {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4);
+  }
+
+  .meta-line {
+    flex: 1;
+    width: auto;
+  }
+
+  .meta-item:last-child {
+    text-align: right;
+  }
+
+  .figure-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* the table of contents sits on the far left, the article moves to the right when the screen is narrow */
+
+@media (min-width: 900px) {
+  .rail {
+    position: fixed;
+    top: 96px;
+    left: 24px;
+    width: 160px;
+  }
+
+  .article-toc {
+    display: block;
+  }
+
+  .article {
+    width: calc(100% - 200px);
+    margin: 0 0 0 200px;
+    padding-top: 110px;
+  }
+}
+
+/* wide screen, enough space on the sides so the article can be centered again */
+
+@media (min-width: 1400px) {
+  .article {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article-hero, .meta-line::after {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .article-body h2.reveal::before {
+    width: 28px;
+    transition: none;
+  }
+
+  .reading-progress {
+    display: none;
+  }
+}

@@ -565,8 +565,6 @@ main{
 .show-project{
   margin: var(--space-1) 0 0;
   color: var(--color-accent);
-  position: absolute;
-  opacity: 0;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
@@ -877,6 +875,11 @@ footer::after {
   .project-card:nth-child(even) {
       position: relative;
       top: 100px;
+  }
+
+  .show-project{
+    position: absolute;
+    opacity: 0;
   }
 
   .status-row{
