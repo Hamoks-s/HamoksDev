@@ -140,7 +140,7 @@ header {
   z-index: 20;
   background: var(--color-background);
   border-bottom: 1px solid transparent;
-  transition: background-color 0.45s, border-color 0.45s;
+  transition: background-color 0.45s, border-color 0.45s, transform 0.5s;
 }
 
 header .container {
@@ -151,12 +151,15 @@ header .container {
   padding-top: 20px;
   padding-bottom: 20px;
   transition: padding 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
-
 }
 
 header.is-scrolled {
   background: color-mix(in srgb, var(--color-background) 88%, transparent);
   border-bottom-color: var(--border);
+}
+
+header.is-loading {
+  transform: translateY(-100%); 
 }
 
 header.is-scrolled .container {
