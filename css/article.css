@@ -508,3 +508,146 @@
     display: none;
   }
 }
+
+.article-cover img, .article-body figure img {
+  cursor: zoom-in;
+  transition: border-color 0.2s;
+}
+
+.article-cover img:hover, .article-body figure img:hover {
+  border-color: var(--color-accent);
+}
+
+body.lightbox-is-open {
+  overflow: hidden;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.88);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.lightbox-image {
+  max-width: 92vw;
+  max-height: 78vh;
+  border-radius: 6px;
+  cursor: zoom-in;
+  user-select: none;
+  transition: transform 0.2s;
+}
+
+.lightbox.is-zoomed .lightbox-image {
+  cursor: grab;
+}
+
+.lightbox.is-moving .lightbox-image {
+  transition: none;
+}
+
+.lightbox-button {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.lightbox-button:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.lightbox-close {
+  top: 20px;
+  right: 20px;
+}
+
+.lightbox-prev, .lightbox-next {
+  display: none;
+  top: 50%;
+  margin-top: -24px;
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+.lightbox-prev .icon {
+  transform: rotate(-135deg);
+}
+
+.lightbox-next .icon {
+  transform: rotate(45deg);
+}
+
+.lightbox-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 24px;
+  padding: 0 20px;
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+}
+
+.lightbox-caption {
+  margin: 0;
+}
+
+.lightbox-counter {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (min-width: 700px) {
+  .lightbox-prev, .lightbox-next {
+    display: flex;
+  }
+
+  .lightbox-info {
+    padding: 0 90px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox, .lightbox-image {
+    transition: none;
+  }
+}
