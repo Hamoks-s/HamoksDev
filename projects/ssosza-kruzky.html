@@ -59,11 +59,17 @@
         </div>
 
         <figure class="article-cover">
-            <img src="/images/ssosza-kruzky/ssosza-main-white.png" alt="Screenshot of Ssosza kruzky">
+            <img src="/images/ssosza-kruzky/ssosza-main.png" alt="Screenshot of Ssosza kruzky">
         </figure>
 
 
         <article class="article-body">
+
+            <h2>Ako projekt vznikol</h2>
+
+            <p>Už v <b>prvom ročníku</b> strednej školy za mnou prišla moja škola s <b>ponukou</b> na vytvorenie školskej stránky na registráciu na krúžky pre žiakov základných škôl.</p>
+            <p>Mal som vtedy len <b>16 rokov</b> a <b>minimálne skúsenosti</b> s backendom, takže som bol veľmi vďačný za takúto príležitosť.</p>
+            <p>Stránku som dokončil za <b>2 mesiace</b>. Programoval som <b>sám</b>, bez cudzej pomoci. Dizajn som <b>navrhoval úplne sám</b> podľa vlastných predstáv. Bolo mi poradené len párkrat.</p>
 
             <h2>O projekte</h2>
 
@@ -86,50 +92,39 @@
             <div class="figure-pair">
                 <figure>
                     <img src="/images/ssosza-kruzky/ssosza-admin-stats.png" alt="admin page statistics">
-                    <figcaption>Popis</figcaption>
+                    <figcaption>Admin Štatistiky</figcaption>
                 </figure>
                 <figure>
                     <img src="/images/ssosza-kruzky/ssosza-admin-course.png" alt="admin page courses">
-                    <figcaption>Popis</figcaption>
+                    <figcaption>Admin Vytváranie Kurzov</figcaption>
                 </figure>
                 <figure>
                     <img src="/images/ssosza-kruzky/ssosza-admin-table.png" alt="admin page registration table">
-                    <figcaption>Popis</figcaption>
+                    <figcaption>Admin Tabulka Registrácii</figcaption>
                 </figure>
                 <figure>
                     <img src="/images/ssosza-kruzky/ssosza-admin-email.png" alt="admin page email">
-                    <figcaption>Popis</figcaption>
+                    <figcaption>Admin Posielanie Emailov</figcaption>
                 </figure>
             </div>
 
-            <h2>Druhá sekcia</h2>
+            <h2>Tech stack</h2>
 
-            
-
-            <!-- BLOK: kód, názvy v texte idú takto: <code>app.post</code> -->
-            <pre><code>app.post("/api/register", (req, res) =&gt; {
-            // sem vlož kód, o ktorom píšeš
-            });</code></pre>
-
-            <!-- BLOK: poznámka (oranžová) -->
-            <div class="note">
-                <p>Kratšia poznámka alebo vec, ktorú chceš zvýrazniť.</p>
-            </div>
-
-            <!-- BLOK: tip (modrá, rovnaký blok + trieda note-blue) -->
-            <div class="note note-blue">
-                <p>Tip alebo užitočná informácia.</p>
-            </div>
-
-            <!-- BLOK: obrázok s popisom -->
-            <figure>
-                <img src="/images/ssosza-kruzky.png" alt="Popis obrázka">
-                <figcaption>Popis pod obrázkom</figcaption>
-            </figure>
+            <h3>Frontend</h3>
+            <ul>
+                <li>Vanilla HTML/CSS/JS</li>
+            </ul>
+            <h3>Backend</h3>
+            <ul>
+                <li><b>Server:</b> Node.js + Express</li>
+                <li><b>Databáza:</b> MySQL (mysql2)</li>
+                <li><b>Autentifikácia:</b> JWT pre admin panel, heslo hashované cez bcrypt</li>
+                <li><b>Zabezpečenie:</b> rate limiting (express-rate-limit) na registrácii a prihlásení, CORS, parametrizované SQL dopyty</li>
+                <li><b>Emaily:</b> Nodemailer (SMTP) + OAuth2 cez Microsoft Entra ID (MSAL), Microsoft 365</li>
+                <li><b>Konfigurácia:</b> dotenv</li>
+            </ul>
 
             <h2 data-toc="Záver">Čo som sa naučil</h2>
-
-            
 
             <p>Čo by si urobil inak.</p>
         </article>
