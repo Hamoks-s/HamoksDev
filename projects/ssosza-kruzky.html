@@ -12,18 +12,12 @@
 <body>
     <div class="reading-progress" id="reading-progress"></div>
 
-    <div id="ambient-background">
-        <div class="blob blob-left"></div>
-        <div class="blob blob-right"></div>
-    </div>
-
     <header id="header"></header>
     <script src="/templates/header.js"></script>
 
     <dialog id="mobile-menu"></dialog>
     <script src="/templates/mobile-menu.js"></script>
 
-    <!-- left side: back button and table of contents, the table of contents fills itself from the h2 headings -->
     <div class="rail">
         <a class="back-button" href="/#projects" aria-label="Späť na projekty" title="Späť na projekty">
             <svg class="icon"><use href="#icon-arrow"></use></svg>
@@ -36,7 +30,6 @@
 
     <main class="article">
 
-        <!-- top of the article -->
         <div class="article-hero">
             <h1 class="article-title">SSOSZA Krúžky</h1>
             <p class="article-lead">Stránka na zaregistrovanie sa na školské krúžky.</p>
@@ -60,52 +53,63 @@
             </div>
 
             <div class="article-links">
-                <a class="link-button" href="#">Pozrieť web <svg class="icon"><use href="#icon-arrow"></use></svg></a>
+                <a class="link-button" href="https://kruzky.ssosza.sk">Pozrieť web <svg class="icon"><use href="#icon-arrow"></use></svg></a>
                 <a class="link-button link-button-outline" href="https://github.com/Hamoks-s">GitHub <svg class="icon"><use href="#icon-arrow"></use></svg></a>
             </div>
         </div>
 
         <figure class="article-cover">
-            <img src="/images/ssosza-kruzky.png" alt="Screenshot of Ssosza kruzky">
+            <img src="/images/ssosza-kruzky/ssosza-main-white.png" alt="Screenshot of Ssosza kruzky">
         </figure>
 
-        <!--
-            CONTENT
-            The table of contents is made from the h2 headings.
-            A shorter name in the table of contents: <h2 data-toc="Krátky názov">
-            Every block below works on its own. Copy it, change the text and put it wherever you want.
-        -->
+
         <article class="article-body">
 
-            <!-- BLOK: nadpis sekcie (ide do obsahu) -->
-            <h2>Prvá sekcia</h2>
+            <h2>O projekte</h2>
 
-            <!-- BLOK: odsek, odkaz v texte -->
-            <p>Bežný text. Čo si postavil, pre koho to je a čo to robí. Odkaz na niečo môžeš dať <a href="#">takto do textu</a>.</p>
+            <p>Je to stránka na predbežné zaregistrovanie žiakov základných ale aj stredných škôl, na rôzne krúžky poskytované školou.</p>
 
-            <!-- BLOK: podnadpis (do obsahu nejde) -->
-            <h3>Podnadpis</h3>
+            <h3>Funkcie</h3>
 
-            <!-- BLOK: odrážky -->
             <ul>
-                <li>Prvý bod</li>
-                <li>Druhý bod</li>
-                <li>Tretí bod</li>
+                <li>Po registrácii použivateľovi pošleme email na potrvdenie registrácie</li>
+                <li>Registrácie sa ukladajú do databázy kde je potom administátor na admin stránke može kontrolovať, prípadne vymazať.</li>
+                <li>Admin stránka ma viacero funkcií, napríklad: </li>
+                <ol>
+                    <li>Štatistíky krúžkov, ako existujúcich tak aj vymazaných</li>
+                    <li>Vytváranie krúžkov a úspechov</li>
+                    <li>Tabuľka registrácií s filtrovaním a exportovaním do xlsx súboru</li>
+                    <li>Posielanie emailov zaregistrovaným</li>
+                </ol>
             </ul>
+
+            <div class="figure-pair">
+                <figure>
+                    <img src="/images/ssosza-kruzky/ssosza-admin-stats.png" alt="admin page statistics">
+                    <figcaption>Popis</figcaption>
+                </figure>
+                <figure>
+                    <img src="/images/ssosza-kruzky/ssosza-admin-course.png" alt="admin page courses">
+                    <figcaption>Popis</figcaption>
+                </figure>
+                <figure>
+                    <img src="/images/ssosza-kruzky/ssosza-admin-table.png" alt="admin page registration table">
+                    <figcaption>Popis</figcaption>
+                </figure>
+                <figure>
+                    <img src="/images/ssosza-kruzky/ssosza-admin-email.png" alt="admin page email">
+                    <figcaption>Popis</figcaption>
+                </figure>
+            </div>
 
             <h2>Druhá sekcia</h2>
 
-            <!-- BLOK: číslované kroky -->
-            <ol>
-                <li>Prvý krok</li>
-                <li>Druhý krok</li>
-                <li>Tretí krok</li>
-            </ol>
+            
 
             <!-- BLOK: kód, názvy v texte idú takto: <code>app.post</code> -->
             <pre><code>app.post("/api/register", (req, res) =&gt; {
-  // sem vlož kód, o ktorom píšeš
-});</code></pre>
+            // sem vlož kód, o ktorom píšeš
+            });</code></pre>
 
             <!-- BLOK: poznámka (oranžová) -->
             <div class="note">
@@ -125,22 +129,11 @@
 
             <h2 data-toc="Záver">Čo som sa naučil</h2>
 
-            <!-- BLOK: dva obrázky vedľa seba (na mobile pod sebou) -->
-            <div class="figure-pair">
-                <figure>
-                    <img src="/images/ssosza-kruzky.png" alt="Popis prvého obrázka">
-                    <figcaption>Popis 1</figcaption>
-                </figure>
-                <figure>
-                    <img src="/images/ssosza-kruzky.png" alt="Popis druhého obrázka">
-                    <figcaption>Popis 2</figcaption>
-                </figure>
-            </div>
+            
 
             <p>Čo by si urobil inak.</p>
         </article>
 
-        <!-- ĎALŠÍ PROJEKT: zmaž celý blok, ak žiadny ďalší nie je -->
         <div class="article-end">
             <a class="next-project" href="/projects/dalsi-projekt.html">
                 <div>
