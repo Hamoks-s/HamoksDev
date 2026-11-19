@@ -87,7 +87,7 @@
 
 .article-title {
   margin: 0;
-  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  font-size: var(--text-4xl);
   line-height: 1.05;
   letter-spacing: -0.04em;
 }
@@ -192,6 +192,7 @@
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
+  object-position: top;
   object-fit: cover;
   border: 1px solid var(--border-strong);
   border-radius: 6px;
@@ -204,7 +205,7 @@
 
 .article-body h2 {
   margin: var(--space-6) 0 var(--space-4);
-  font-size: var(--text-3xl);
+  font-size: var(--text-3-5xl);
   line-height: 1.15;
   letter-spacing: -0.03em;
   scroll-margin-top: 100px; 
@@ -225,7 +226,13 @@
 }
 
 .article-body h3 {
-  margin: var(--space-4) 0 var(--space-1);
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-2-5xl);
+  letter-spacing: -0.02em;
+}
+
+.article-body h4 {
+  margin: var(--space-2) 0 var(--space-1);
   font-size: var(--text-xl);
   letter-spacing: -0.02em;
 }

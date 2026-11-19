@@ -32,7 +32,7 @@
 
         <div class="article-hero">
             <h1 class="article-title">SSOSZA Krúžky</h1>
-            <p class="article-lead">Stránka na zaregistrovanie sa na školské krúžky.</p>
+            <p class="article-lead">Web na registráciu žiakov na školské krúžky</p>
 
             <div class="project-tags">
                 <span>Web</span>
@@ -67,26 +67,34 @@
 
             <h2>Ako projekt vznikol</h2>
 
-            <p>Už v <b>prvom ročníku</b> strednej školy za mnou prišla moja škola s <b>ponukou</b> na vytvorenie školskej stránky na registráciu na krúžky pre žiakov základných škôl.</p>
-            <p>Mal som vtedy len <b>16 rokov</b> a <b>minimálne skúsenosti</b> s backendom, takže som bol veľmi vďačný za takúto príležitosť.</p>
-            <p>Stránku som dokončil za <b>2 mesiace</b>. Programoval som <b>sám</b>, bez cudzej pomoci. Dizajn som <b>navrhoval úplne sám</b> podľa vlastných predstáv. Bolo mi poradené len párkrat.</p>
+            <p>Už v <b>prvom ročníku</b> strednej školy za mnou prišla moja škola s ponukou na vytvorenie webu na registráciu žiakov na krúžky.</p>
+            <p>Mal som vtedy len <b>16 rokov</b> a <b>minimálne skúsenosti</b> s backendom, takže som túto príležitosť nechcel pustiť.</p>
+            <p>Web som dokončil za <b>2 mesiace</b>. Programoval som <b>sám</b>, bez cudzej pomoci. Pri dizajne som sa občas poradil s učiteľmi.</p>
 
             <h2>O projekte</h2>
 
-            <p>Je to stránka na predbežné zaregistrovanie žiakov základných ale aj stredných škôl, na rôzne krúžky poskytované školou.</p>
+            <p>Web slúži na predbežnú registráciu žiakov základných aj stredných škôl na krúžky, ktoré škola ponúka. Škola vďaka nemu vidí, o ktoré krúžky je záujem.</p>
 
             <h3>Funkcie</h3>
 
+            <h4>Pre žiakov</h4>
             <ul>
-                <li>Po registrácii použivateľovi pošleme email na potrvdenie registrácie</li>
-                <li>Registrácie sa ukladajú do databázy kde je potom administátor na admin stránke može kontrolovať, prípadne vymazať.</li>
-                <li>Admin stránka ma viacero funkcií, napríklad: </li>
-                <ol>
-                    <li>Štatistíky krúžkov, ako existujúcich tak aj vymazaných</li>
-                    <li>Vytváranie krúžkov a úspechov</li>
-                    <li>Tabuľka registrácií s filtrovaním a exportovaním do xlsx súboru</li>
-                    <li>Posielanie emailov zaregistrovaným</li>
-                </ol>
+                <li>Po registrácii používateľovi pošleme email na <b>potvrdenie</b> registrácie</li>
+            </ul>
+
+            <h4>Pre administrátora</h4>
+
+            <ul>
+                <li>Hlavná stránka sa skladá z krúžkov a úspechov priamo z databázy, takže škola ich môže <b>meniť bez zásahu</b> do kódu</li>
+                <li><b>Štatistíky</b> krúžkov, ako existujúcich, tak aj vymazaných</li>
+                <li>Vytváranie, úprava a mazanie <b>krúžkov a úspechov</b></li>
+                <li><b>Tabuľka registrácií</b> s filtrovaním, mazaním a exportom do xlsx</li>
+                <li><b>Emaily</b> pre žiakov konkrétneho krúžku</li>
+            </ul>
+
+            <h4>Na pozadí</h4>
+            <ul>
+                <li>Každý pondelok o 2:00 sa automaticky <b>zálohujú</b> registrácie</li>
             </ul>
 
             <div class="figure-pair">
@@ -96,11 +104,11 @@
                 </figure>
                 <figure>
                     <img src="/images/ssosza-kruzky/ssosza-admin-course.png" alt="admin page courses">
-                    <figcaption>Admin Vytváranie Kurzov</figcaption>
+                    <figcaption>Admin Vytváranie Krúžkov</figcaption>
                 </figure>
                 <figure>
                     <img src="/images/ssosza-kruzky/ssosza-admin-table.png" alt="admin page registration table">
-                    <figcaption>Admin Tabulka Registrácii</figcaption>
+                    <figcaption>Admin Tabuľka Registrácií</figcaption>
                 </figure>
                 <figure>
                     <img src="/images/ssosza-kruzky/ssosza-admin-email.png" alt="admin page email">
@@ -111,34 +119,43 @@
             <h2>Tech stack</h2>
 
             <h3>Frontend</h3>
+
             <ul>
                 <li>Vanilla HTML/CSS/JS</li>
             </ul>
+
             <h3>Backend</h3>
+
             <ul>
                 <li><b>Server:</b> Node.js + Express</li>
                 <li><b>Databáza:</b> MySQL (mysql2)</li>
                 <li><b>Autentifikácia:</b> JWT pre admin panel, heslo hashované cez bcrypt</li>
-                <li><b>Zabezpečenie:</b> rate limiting (express-rate-limit) na registrácii a prihlásení, CORS, parametrizované SQL dopyty</li>
+                <li><b>Zabezpečenie:</b> rate limiting (express-rate-limit) na registrácii a prihlásení, ochrana proti SQL injection</li>
                 <li><b>Emaily:</b> Nodemailer (SMTP) + OAuth2 cez Microsoft Entra ID (MSAL), Microsoft 365</li>
                 <li><b>Konfigurácia:</b> dotenv</li>
             </ul>
 
-            <h2 data-toc="Záver">Čo som sa naučil</h2>
+            <div class="figure-pair">
+                <figure>
+                    <img src="/images/ssosza-kruzky/ssosza-registration-form.png" alt="registration form">
+                    <figcaption>Registračný Formulár</figcaption>
+                </figure>
+                <figure>
+                    <img src="/images/ssosza-kruzky/ssosza-email-confirmation.png" alt="email confirmation">
+                    <figcaption>Potvrdenie Registrácie</figcaption>
+                </figure>
+            </div>
 
-            <p>Čo by si urobil inak.</p>
+            <h2 data-toc="Záver">Čo mi projekt dal</h2>
+
+            <p>
+                Bol to môj <b>prvý projekt</b>, ktorý nebol len pre mňa. Musel som myslieť na veci, ktoré hobby projekt nerieši:
+                zálohy dát, ochranu prihlásenia pred hádaním hesiel a admin rozhranie, ktoré zvládne človek bez programátorských znalostí.
+            </p>
+
         </article>
 
-        <div class="article-end">
-            <a class="next-project" href="/projects/dalsi-projekt.html">
-                <div>
-                    <span class="label">Ďalší projekt</span>
-                    <h3>Názov projektu</h3>
-                    <p class="next-sub">Krátky popis ďalšieho projektu.</p>
-                </div>
-                <span class="next-arrow"><svg class="icon"><use href="#icon-arrow"></use></svg></span>
-            </a>
-        </div>
+        
 
     </main>
 
