@@ -1,3 +1,5 @@
+// WARNING: this file is fully ai generated
+
 // image viewer (lightbox), every image in the cover and in the article content opens in it
 // to add a new image to it just put the image in the article, nothing else needs to be done
 
@@ -161,7 +163,6 @@ document.addEventListener("keydown", (event) => {
 })
 
 // zooming with the mouse wheel
-
 lightboxStage.addEventListener("wheel", (event) => {
   event.preventDefault()
 

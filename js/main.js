@@ -1,5 +1,3 @@
-
-
 // the hero subtext typing
 const tagline = document.getElementById('tagline');
 
@@ -26,3 +24,5 @@ if (tagline) {
     setTimeout(typeNext, 900); // wait for the title animation
 }
 
+// header link
+Promise.all([headerReady]).then(() => headerLinksActive("projects"));

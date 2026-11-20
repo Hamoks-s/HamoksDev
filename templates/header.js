@@ -13,4 +13,4 @@ async function load() {
     newHeader.classList.remove("is-loading");
 }
 
-const menuReady = load();
+const headerReady = load();

@@ -1,0 +1,234 @@
+/* Intro */
+
+#tools {
+  padding-top: 160px;
+}
+
+#tools h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 8vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+/* uses the dot from style.css (.status + .status-dot) */
+.tool-count.status {
+  display: inline-flex;
+  margin-bottom: 22px;
+  padding: 4px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 99px;
+  color: var(--color-text-muted);
+}
+
+.tools-subtitle {
+  margin: 18px 0 0;
+  max-width: 46ch;
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  color: var(--color-text-muted);
+}
+
+/* Filters and search */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 36px 0 28px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.filter {
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: 4px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.filter:hover {
+  color: var(--color-main-text);
+}
+
+.filter.is-active {
+  color: var(--color-main-text);
+  border-color: var(--color-accent);
+  background: var(--color-accent-glow);
+}
+
+.search {
+  width: min(100%, 260px);
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 99px;
+  background: var(--color-panel);
+  color: var(--color-main-text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search:focus {
+  border-color: var(--color-accent);
+}
+
+.search::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Tool cards */
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.tool-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 210px;
+  padding: var(--space-3);
+  background: var(--color-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.25s, transform 0.25s;
+  animation: card-rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: var(--delay, 0s);
+}
+
+.tool-card[hidden] {
+  display: none;
+}
+
+/* blue glow in the corner, shown on hover */
+.tool-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(320px circle at 0% 0%, var(--color-accent-glow), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tool-card > * {
+  position: relative;
+}
+
+.tool-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-4px);
+}
+
+.tool-card:hover::before {
+  opacity: 1;
+}
+
+.tool-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  color: var(--color-accent);
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.tool-icon .icon {
+  width: 22px;
+  height: 22px;
+}
+
+.tool-card:hover .tool-icon {
+  color: var(--color-warm-accent);
+  border-color: var(--color-warm-accent);
+}
+
+.tool-card h3 {
+  margin: 0;
+  font-size: var(--text-xl);
+  letter-spacing: -0.02em;
+}
+
+.tool-card p {
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.tool-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+/* tag style comes from .project-tags in style.css */
+.tool-bottom .project-tags {
+  margin-top: 0;
+}
+
+.tool-arrow {
+  color: var(--color-text-muted);
+  transition: color 0.25s, transform 0.25s;
+}
+
+.tool-card:hover .tool-arrow {
+  color: var(--color-warm-accent);
+  transform: translateX(4px);
+}
+
+.tools-empty {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* Keyframes */
+
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-card {
+    animation: none;
+  }
+}
+
+/* desktop version */
+
+@media (min-width: 700px) {
+  .tool-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .tool-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -329,6 +329,7 @@
 .article-body figure img {
   display: block;
   width: 100%;
+  object-fit: cover;
   border: 1px solid var(--border-strong);
   border-radius: 6px;
 }

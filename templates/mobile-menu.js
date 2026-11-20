@@ -10,4 +10,4 @@ async function load() {
     menuBox.outerHTML = await response.text();
 }
 
-const headerReady = load();
+const menuReady = load();

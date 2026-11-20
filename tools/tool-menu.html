@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="sk" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nástroje | Hamoks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/tool-menu.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="/images/logo/favicon_32.png">
+</head>
+
+<body>
+    <header id="header"></header>
+    <script src="/templates/header.js"></script>
+
+    <dialog id="mobile-menu"></dialog>
+    <script src="/templates/mobile-menu.js"></script>
+
+    <main>
+        <section id="tools">
+
+            <div class="status is-live tool-count">
+                <i class="status-dot"></i>
+                <span id="tool-count"></span>
+            </div>
+            <h1>Nástroje</h1>
+            <p class="tools-subtitle">Malé nástroje, ktoré som si napísal sám. Vyber si jeden a vyskúšaj ho priamo v prehliadači.</p>
+
+            <div class="toolbar">
+                <div class="filters">
+                    <button class="filter is-active" data-filter="all">Všetko</button>
+                    <button class="filter" data-filter="Dizajn">Dizajn</button>
+                    <button class="filter" data-filter="Kód">Kód</button>
+                    <button class="filter" data-filter="Text">Text</button>
+                    <button class="filter" data-filter="Bežné">Bežné</button>
+                </div>
+                <input class="search" id="tool-search" type="search" placeholder="Hľadať nástroj…">
+            </div>
+
+            <div class="tool-grid">
+
+                <a class="tool-card" href="/tools/grades.html" data-category="Bežné" style="--delay: 0s">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <div>
+                        <h3>Priemer známok</h3>
+                        <p>Kalkulačka na vypočitanie priemer známok.</p>
+                    </div>
+                    <div class="tool-bottom">
+                        <div class="project-tags">
+                            <span>Bežné</span>
+                        </div>
+                        <span class="tool-arrow">
+                            <svg class="icon"><use href="#icon-arrow"></use></svg>
+                        </span>
+                    </div>
+                </a>
+            </div>
+
+            <p class="tools-empty" id="tool-empty" hidden>Žiadny nástroj sa nenašiel.</p>
+
+        </section>
+    </main>
+
+    <footer id="footer"></footer>
+    <script src="/templates/footer.js"></script>
+    <script src="/js/mobile-menu-function.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/tool-menu.js"></script>
+
+</body>
+</html>
