@@ -1,0 +1,223 @@
+.calculator {
+  padding: 40px 0 20px;
+}
+
+.calc-labels,
+.grade-row,
+.add-row {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 12px;
+}
+
+.calc-labels {
+  margin-bottom: 10px;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.calc-labels .labels-grades {
+  padding-left: 4px;
+  text-align: left;
+}
+
+#grade-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weight,
+.weight-input,
+.grades {
+  height: 56px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--color-panel);
+  color: var(--color-main-text);
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.weight {
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-accent);
+}
+
+.weight-input {
+  width: 100%;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-accent);
+}
+
+.grades {
+  width: 100%;
+  padding: 0 18px;
+  font-size: 1.05rem;
+}
+
+.weight-input:focus,
+.grades:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
+}
+
+.weight-input::placeholder,
+.grades::placeholder {
+  color: var(--color-text-muted);
+  font-weight: var(--weight-normal);
+}
+
+.add-row {
+  margin-top: 12px;
+}
+
+.add-row .weight-input {
+  background: transparent;
+  border-style: dashed;
+}
+
+.add-row .weight-input::placeholder {
+  font-size: 0.9rem;
+}
+
+.add-row-button {
+  height: 56px;
+  padding: 0 18px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.add-row:hover .weight-input,
+.add-row:hover .add-row-button {
+  border-color: var(--color-accent);
+  background: var(--color-accent-glow);
+}
+
+.add-row:hover .weight-input::placeholder,
+.add-row:hover .add-row-button {
+  color: var(--color-accent);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn {
+  padding: 12px 26px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-main-text);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.btn-primary:hover {
+  background: var(--color-warm-accent);
+  border-color: var(--color-warm-accent);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.hint {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+}
+
+.result {
+  margin-top: 40px;
+}
+
+.result-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 30px;
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+
+.result-label {
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.result-detail {
+  margin: 6px 0 0;
+  font-size: 1.1rem;
+}
+
+.result-number {
+  font-size: clamp(3.6rem, 12vw, 6.5rem);
+  line-height: 1;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.05em;
+  color: var(--color-warm-accent);
+}
+
+.result-number.is-updated {
+  animation: number-pop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Keyframes */
+
+@keyframes number-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0.3;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .result-number.is-updated {
+    animation: none;
+  }
+}
+
+/* desktop version */
+
+@media (min-width: 700px) {
+  .calc-labels,
+  .grade-row,
+  .add-row {
+    grid-template-columns: 120px 1fr;
+  }
+}

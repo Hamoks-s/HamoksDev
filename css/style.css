@@ -129,6 +129,29 @@ section {
   background: radial-gradient(circle, var(--blob-teal), transparent 65%);
 }
 
+#cursor-glow {
+  position: absolute;
+  left: -330px;
+  top: -330px;
+  width: 660px;
+  height: 660px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-accent-glow), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.6s;
+  will-change: transform;
+}
+
+#cursor-glow.is-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  #cursor-glow {
+    display: none;
+  }
+}
+
 .container {
   max-width: 1040px;
   margin: 0 auto;

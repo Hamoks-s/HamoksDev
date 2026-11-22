@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="sk" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Známky | Hamoks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/tool-menu.css">
+  <link rel="stylesheet" href="/css/tools/grades.css">
+  <link rel="icon" type="image/png" href="/images/logo/favicon_32.png">
+</head>
+
+<body>
+    <header id="header"></header>
+    <script src="/templates/header.js"></script>
+
+    <dialog id="mobile-menu"></dialog>
+    <script src="/templates/mobile-menu.js"></script>
+
+    <main>
+
+        <div class="tool-hero">
+            <a class="back-link" href="/tools/tool-menu.html">← Nástroje</a>
+            <h1>Priemer známok</h1>
+            <p>Spočítaj si priemer svojích známok</p>
+        </div>
+
+        <section class="calculator">
+
+            <form id="grades-form">
+
+                <div class="calc-labels">
+                    <span>Váha</span>
+                    <span class="labels-grades">Známky</span>
+                </div>
+
+                <div id="grade-rows">
+
+                    <div class="grade-row" data-weight="0.5">
+                        <div class="weight">0.5</div>
+                        <input class="grades" type="text" placeholder="napr. 1, 2, 1, 5" aria-label="Známky s váhou 0,5">
+                    </div>
+
+                    <div class="grade-row" data-weight="1">
+                        <div class="weight">1</div>
+                        <input class="grades" type="text" placeholder="napr. 1, 2, 1, 5" aria-label="Známky s váhou 1">
+                    </div>
+
+                    <div class="grade-row" data-weight="1.5">
+                        <div class="weight">1.5</div>
+                        <input class="grades" type="text" placeholder="napr. 1, 2, 1, 5" aria-label="Známky s váhou 1,5">
+                    </div>
+
+                    <div class="grade-row" data-weight="2">
+                        <div class="weight">2</div>
+                        <input class="grades" type="text" placeholder="napr. 1, 2, 1, 5" aria-label="Známky s váhou 2">
+                    </div>
+
+                </div>
+
+                <div class="add-row">
+                    <input class="weight-input" form="add-row-form" type="text" inputmode="decimal" autocomplete="off"
+                           required pattern="[0-9]+([.][0-9]+)?" maxlength="7" title="Napíš číslo, napr. 2 alebo 1.5 a vačšie ako 0"
+                           placeholder="vlastná" aria-label="Váha nového riadku">
+                    <button class="add-row-button" form="add-row-form" type="submit">Pridať riadok s vlastnou váhou</button>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="calculate-button" type="submit">Vypočítať</button>
+                    <button class="btn btn-secondary" id="reset-button" type="button">Vymazať</button>
+                </div>
+
+            </form>
+
+            <form id="add-row-form"></form>
+
+            <div class="result glow-panel" aria-live="polite">
+                <div class="glow-panel-inner result-inner">
+                    <div>
+                        <div class="result-label">Tvoj priemer</div>
+                        <p class="result-detail" id="result-detail">-</p>
+                    </div>
+                    <div class="result-number" id="result-number">–</div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer id="footer"></footer>
+    <script src="/templates/footer.js"></script>
+
+
+    <script src="/js/mobile-menu-function.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/tools/grades.js"></script>
+</body>
+</html>
