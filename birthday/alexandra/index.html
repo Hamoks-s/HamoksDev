@@ -1,11 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexandra</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>For you</title>
+<link rel="stylesheet" href="/birthday/alexandra/style.css">
 </head>
 <body>
-    
+
+<!-- 1. START -->
+<section class="screen active" id="start">
+  <h1>Hey!</h1>
+  <p>I made a little adventure for you. A few tasks and a couple of surprises.</p>
+  <button id="startBtn">Let's start</button>
+</section>
+
+<!-- 2. FISHING GAME -->
+<section class="screen" id="game">
+  <h2>Catch the octopus</h2>
+  <p class="small">Drag to move the boat. Tap the lake or the button to drop the hook. The octopuses live at the very bottom.</p>
+  <canvas id="lake"></canvas>
+  <button id="dropBtn">Drop the hook</button>
+  <p class="small" id="caughtText">Fish caught: 0</p>
+</section>
+
+<!-- 3. OCTOPUS REVEAL -->
+<section class="screen" id="reveal">
+  <!-- PICTURE: octopus photo. Change the file name inside url(...) -->
+  <div class="img-slot">
+    <img src="images/octopus.jpg">
+  </div>
+  <h2>You did it!</h2>
+  <p>Your text about the octopus goes here.</p>
+  <button id="revealBtn">Continue</button>
+</section>
+
+<!-- 4. RED BULL GIFT -->
+<section class="screen" id="gift">
+  <p class="small" id="giftHint">Tap the gift</p>
+  <div class="gift" id="giftBox">
+    <div class="can">
+      <!-- PICTURE: Red Bull can. Change the file name inside url(...) -->
+      <div class="img-slot">
+        <img src="images/redbull.jpg" alt="">
+      </div>
+    </div>
+    <div class="box"></div>
+    <div class="lid"><div class="bow"></div></div>
+  </div>
+  <div id="giftText">
+    <h2>Gives you wings</h2>
+    <button id="giftBtn">Continue</button>
+  </div>
+</section>
+
+<!-- 5. RICK AND MORTY QUIZ -->
+<section class="screen" id="quiz">
+  <div id="quizBody">
+    <p class="small" id="quizCount"></p>
+    <!-- QUIZ PICTURE: set from script.js (see QUIZ), not here -->
+    <div class="img-slot" id="quizImg">
+        <img src="" alt="">
+    </div>
+    <h2 id="quizQuestion"></h2>
+    <div class="answers" id="quizAnswers"></div>
+  </div>
+</section>
+
+<!-- 6. QUIZ RESULT -->
+<section class="screen" id="quizResult">
+  <p class="small">Your Rick and Morty grade</p>
+  <div class="grade" id="quizGrade"></div>
+  <h2 id="quizScoreText"></h2>
+  <p id="quizComment"></p>
+  <button id="quizResultBtn">Continue</button>
+</section>
+
+<!-- 6b. RHYTHM SONG SELECT -->
+<section class="screen" id="rhythmSelect">
+  <h2>Pick a song</h2>
+  <p class="small">Choose the one you want to play.</p>
+  <div class="answers" id="songList"></div>
+</section>
+
+<!-- 7. RHYTHM GAME -->
+<section class="screen" id="rhythm">
+  <p class="small" id="rhythmInfo">Tap the lane when a note reaches the line. You can't lose, only score.</p>
+  <canvas id="rhythmCanvas" width="360" height="480"></canvas>
+  <button id="rhythmStart">Start</button>
+</section>
+
+<!-- 8. RHYTHM RESULT -->
+<section class="screen" id="rhythmResult">
+  <p class="small">Your rhythm grade</p>
+  <div class="grade" id="rhythmGrade"></div>
+  <h2 id="rhythmPercent"></h2>
+  <p class="small" id="rhythmDetails"></p>
+  <p id="rhythmComment"></p>
+  <button id="rhythmAgainBtn" style="background: var(--grey)">Pick another song</button>
+  <button id="rhythmResultBtn">Continue</button>
+</section>
+
+<!-- 9a. SZCZYTNO INTRO -->
+<section class="screen" id="geoIntro">
+  <h1>Do you know Szczytno?</h1>
+  <p>Placeholder intro text. You will see a few photos from around town. Find each place on the map.</p>
+  <button id="geoStartBtn">Start</button>
+</section>
+
+<!-- 9b. SZCZYTNO GAME -->
+<section class="screen" id="geo">
+  <div id="geoPhoto"></div>
+  <p class="small geo-badge" id="geoCount"></p>
+  <div id="geoPanel">
+    <button id="geoMini">Hide map</button>
+    <div id="geoMapWrap">
+      <div id="geoMap"></div>
+      <div id="geoTap">Tap to open the map</div>
+    </div>
+    <p class="small" id="geoFeedback"></p>
+    <button id="geoConfirm" disabled>Confirm guess</button>
+    <button id="geoNext" style="display: none">Next round</button>
+  </div>
+</section>
+
+<!-- 10. SZCZYTNO RESULT -->
+<section class="screen" id="geoResult">
+  <div class="grade" id="geoGrade"></div>
+  <h2 id="geoTitle"></h2>
+  <p id="geoText"></p>
+  <button id="geoContinueBtn">Continue</button>
+  <button id="geoAgainBtn">Play again</button>
+  <button id="geoSkipBtn" style="background: var(--grey)">Skip this game</button>
+</section>
+
+<!-- 11. ROSE COLORING -->
+<section class="screen" id="rose">
+  <p class="small" id="roseHint"></p>
+  <div id="roseView">
+    <div id="roseWrap">
+      <div id="roseGrid"></div>
+      <!-- PICTURE: the real rose photo that fades in after coloring. The pixel version in script.js (ROSE) was made from it -->
+      <div class="img-slot" id="roseImg">
+        <img src="images/dark-red-rose.jpg">
+      </div>
+    </div>
+  </div>
+  <div id="palette"></div>
+  <div id="roseText">
+    <p>Your text about the roses goes here.</p>
+    <button id="roseBtn">Continue</button>
+  </div>
+</section>
+
+<!-- 12. FINAL MESSAGE -->
+<section class="screen" id="final">
+  <h1 class="fade">Happy Birthday!</h1>
+  <p class="fade" style="animation-delay: 1s">First line of your message goes here.</p>
+  <p class="fade" style="animation-delay: 2.2s">Second line of your message goes here.</p>
+  <p class="fade" style="animation-delay: 3.4s">Last line, and your name.</p>
+</section>
+
+<!-- (old placeholder) -->
+
+<!-- music player (whole page) -->
+<div id="music">
+  <button id="musicToggle" aria-label="Music">♫</button>
+  <div id="musicPanel">
+    <p id="songTitle"></p>
+    <div class="img-slot album" id="albumArt"></div>
+    <div class="controls">
+      <button id="back10">−10</button>
+      <button id="playPause">▶</button>
+      <button id="fwd10">+10</button>
+      <button id="stopBtn">■</button>
+      <button id="nextBtn">⏭</button>
+    </div>
+  </div>
+</div>
+
+<div id="ink"></div>
+
+<!-- Leaflet map library. In the final version download it and host it yourself. -->
+<script src="/birthday/alexandra/leaflet/leaflet.js"></script>
+<script src="/birthday/alexandra/script.js"></script>
 </body>
 </html>

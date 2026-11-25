@@ -1,0 +1,298 @@
+:root {
+  --navy: #0b1426;
+  --navy-light: #16233f;
+  --grey: #8b94a5;
+  --text: #e8ebf2;
+  --pink: #ff8fb8;
+  color-scheme: dark;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: inherit; }
+body {
+  margin: 0;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  color: var(--text);
+  font-family: ui-rounded, "Nunito", system-ui, sans-serif;
+  background: radial-gradient(circle at 50% 110%, rgba(255, 143, 184, 0.2), transparent 60%), var(--navy);
+}
+
+/* ---------- screens ---------- */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 20px;
+  text-align: center;
+}
+.screen.active { display: flex; }
+h1 { margin: 0; font-size: 2.4rem; color: var(--pink); }
+h2 { margin: 0; font-size: 1.4rem; }
+p { margin: 0; max-width: 320px; line-height: 1.5; color: var(--text); }
+.small { font-size: 0.9rem; color: var(--grey); }
+
+button {
+  font: inherit;
+  font-weight: 700;
+  color: var(--navy);
+  background: var(--pink);
+  border: 0;
+  border-radius: 999px;
+  min-height: 48px;
+  padding: 12px 28px;
+  cursor: pointer;
+}
+button:active { transform: scale(0.96); }
+
+/* ---------- ink transition ---------- */
+#ink {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: #070c18;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- music player ---------- */
+#music {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  right: 12px;
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+#musicToggle {
+  width: 38px;
+  height: 38px;
+  min-height: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  line-height: 1;
+  font-weight: 900;
+  background: var(--navy-light);
+  color: var(--pink);
+  border: 1px solid var(--grey);
+}
+#musicPanel {
+  display: none;
+  width: min(92vw, 320px);
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--navy-light);
+  border: 1px solid var(--grey);
+  text-align: center;
+}
+#musicPanel.open { display: block; }
+#songTitle { margin-bottom: 10px; font-size: 0.95rem; max-width: none; }
+.controls { display: flex; gap: 6px; }
+.controls button {
+  flex: 1;
+  min-height: 44px;
+  padding: 0;
+  font-size: 0.9rem;
+  background: var(--grey);
+}
+
+/* ---------- fishing game ---------- */
+#lake {
+  width: min(100vw, 64vh, 760px);
+  aspect-ratio: 180 / 170;
+  -webkit-tap-highlight-color: transparent;
+  image-rendering: pixelated;
+  touch-action: none;
+}
+
+/* ---------- reveal screens ---------- */
+/* square slot for a picture: put the image path in style="background-image: url(...)" */
+.img-slot {
+    width: min(70vw, 300px);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.img-slot img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.album { width: 72px; margin: 0 auto 10px; border-radius: 8px; }
+
+/* ---------- gift ---------- */
+.gift {
+  position: relative; width: 200px; height: 230px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.gift .box {
+  position: absolute; bottom: 0; left: 30px;
+  width: 140px; height: 96px;
+  background: var(--pink); border-radius: 8px;
+  transition: opacity 0.6s;
+}
+.gift .lid {
+  position: absolute; bottom: 90px; left: 22px;
+  width: 156px; height: 30px;
+  background: #ff74a6; border-radius: 8px;
+  transform-origin: left bottom;
+  transition: transform 0.7s, opacity 0.7s;
+}
+.gift .box::after, .gift .lid::after {
+  content: "";
+  position: absolute; top: 0; height: 100%; width: 24px;
+  background: var(--grey);
+}
+.gift .box::after { left: 58px; }
+.gift .lid::after { left: 66px; }
+.can {
+  position: absolute; left: 50px;
+  bottom: 50px;
+  width: 100%;
+  margin-left: -45px;
+  opacity: 0;
+  transform: translateY(0) scale(0.5);
+  transition: transform 0.9s, opacity 0.5s;
+}
+.can .img-slot { width: 100%; }
+.gift.shake { animation: shake 0.4s; }
+@keyframes shake { 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+/* the lid opens a little more with each tap */
+.gift.tap1 .lid { transform: translateY(-8px) rotate(-3deg); }
+.gift.tap1 .box { box-shadow: 0 -6px 16px rgba(255, 255, 255, 0.3); }
+.gift.tap2 .lid { transform: translateY(-20px) rotate(-9deg); }
+.gift.tap2 .box { box-shadow: 0 -10px 28px rgba(255, 255, 255, 0.6); }
+/* bow on top of the lid */
+.bow { position: absolute; left: calc(50% - 8px); top: -8px; width: 16px; height: 16px; background: var(--grey); border-radius: 4px; z-index: 2; }
+.bow::before, .bow::after { content: ""; position: absolute; top: -8px; width: 30px; height: 22px; border: 6px solid var(--grey); border-radius: 50%; }
+.bow::before { left: -28px; transform: rotate(-20deg); }
+.bow::after { right: -28px; transform: rotate(20deg); }
+.confetti { position: absolute; left: 50%; top: 35%; width: 8px; height: 12px; pointer-events: none; z-index: 5; }
+.gift.open .lid { transform: translate(-30px, -80px) rotate(-35deg); opacity: 0; }
+.gift.open .can { opacity: 1; transform: translateY(-90px) scale(1); }
+.gift.done .box, .gift.done .lid { opacity: 0; }
+.gift.done .can { transform: translateY(-50px) scale(1.5); }
+#giftText { opacity: 0; transition: opacity 0.8s; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+#giftText.show { opacity: 1; }
+
+/* ---------- quiz ---------- */
+#quiz h2 { max-width: 340px; }
+.answers { display: flex; flex-direction: column; gap: 10px; width: min(90vw, 340px); }
+.answers button {
+  background: var(--navy-light); color: var(--text);
+  border: 1px solid var(--grey); border-radius: 16px;
+  text-align: left; padding: 12px 18px; -webkit-tap-highlight-color: transparent;
+}
+.answers button.right { background: #5fcf9a; color: var(--navy); border-color: #5fcf9a; }
+.answers button.wrong { background: #b3203a; color: var(--text); border-color: #b3203a; }
+.answers button { transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+.answers button.right { animation: pop 0.5s; }
+.answers button.wrong { animation: wobble 0.4s; }
+@keyframes pop { 40% { transform: scale(1.08); box-shadow: 0 0 20px #5fcf9a; } }
+@keyframes wobble { 20% { transform: translateX(-9px); } 40% { transform: translateX(9px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+/* the whole question slides out, then the next one slides in */
+#quizBody { display: flex; flex-direction: column; align-items: center; gap: 14px; transition: opacity 0.3s, transform 0.3s; }
+#quizBody.out { opacity: 0; transform: translateX(-40px); }
+#quizBody.in { opacity: 0; transform: translateX(40px); }
+#quizImg { width: min(75vw, 500px);
+  aspect-ratio: auto; }
+.grade { font-size: 5rem; font-weight: 900; color: var(--pink); line-height: 1; }
+
+/* ---------- rhythm game ---------- */
+#rhythmCanvas {
+  width: min(100vw, 48vh, 420px);
+  aspect-ratio: 360 / 480;
+  border-radius: 16px;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+button:disabled { opacity: 0.4; }
+
+/* ---------- minimal Leaflet styles (the real leaflet.css is not allowed in the preview) ---------- */
+.leaflet-pane, .leaflet-tile, .leaflet-marker-icon, .leaflet-tile-container, .leaflet-pane > svg, .leaflet-pane > canvas, .leaflet-layer { position: absolute; left: 0; top: 0; }
+.leaflet-container { overflow: hidden; -webkit-tap-highlight-color: transparent; cursor: crosshair; }
+.leaflet-tile { user-select: none; -webkit-user-drag: none; visibility: hidden; max-width: none !important; }
+.leaflet-tile-loaded { visibility: inherit; }
+.leaflet-pane > svg { max-width: none !important; }
+.leaflet-pane { z-index: 400; } .leaflet-tile-pane { z-index: 200; } .leaflet-overlay-pane { z-index: 400; }
+.leaflet-top, .leaflet-bottom { position: absolute; z-index: 1000; pointer-events: none; }
+.leaflet-top { top: 0; } .leaflet-bottom { bottom: 0; } .leaflet-left { left: 0; } .leaflet-right { right: 0; }
+.leaflet-control { position: relative; z-index: 800; pointer-events: auto; float: left; clear: both; }
+.leaflet-right .leaflet-control { float: right; }
+.leaflet-top .leaflet-control { margin-top: 10px; } .leaflet-left .leaflet-control { margin-left: 10px; }
+.leaflet-bottom .leaflet-control { margin-bottom: 6px; } .leaflet-right .leaflet-control { margin-right: 6px; }
+.leaflet-touch-zoom { touch-action: pan-x pan-y; } .leaflet-touch-drag { touch-action: pinch-zoom; }
+.leaflet-touch-drag.leaflet-touch-zoom { touch-action: none; }
+.leaflet-zoom-animated { transform-origin: 0 0; }
+.leaflet-zoom-anim .leaflet-zoom-animated { transition: transform 0.25s cubic-bezier(0, 0, 0.25, 1); }
+.leaflet-zoom-anim .leaflet-tile, .leaflet-pan-anim .leaflet-tile { transition: none; }
+.leaflet-bar a { display: block; width: 32px; height: 32px; line-height: 32px; text-align: center; background: #fff; color: #222; text-decoration: none; font-weight: 700; border-bottom: 1px solid #ccc; }
+.leaflet-bar { border-radius: 8px; overflow: hidden; }
+.leaflet-control-attribution { font-size: 10px; background: rgba(255, 255, 255, 0.75); color: #333; padding: 0 4px; }
+.leaflet-control-attribution a { color: #333; }
+
+/* ---------- Szczytno game ---------- */
+#geo { padding: 0; }
+#geoPhoto { position: absolute; inset: 0; background: var(--navy-light) center / cover no-repeat; }
+.geo-badge { position: absolute; top: 14px; left: 14px; z-index: 2; background: rgba(11, 20, 38, 0.75); padding: 6px 14px; border-radius: 999px; max-width: none; }
+#geoPanel {
+  position: absolute; right: 12px; bottom: 12px; z-index: 3; width: 156px;
+  display: flex; flex-direction: column; gap: 8px; padding: 8px;
+  background: rgba(11, 20, 38, 0.92); border: 1px solid var(--grey); border-radius: 16px;
+}
+#geoPanel.open { width: min(94vw, 460px); }
+#geoMapWrap { position: relative; }
+#geoMap {
+  width: 100%; height: 110px; border-radius: 10px;
+  background: repeating-linear-gradient(0deg, #16233f 0 39px, #1d2d50 39px 40px), #16233f;
+}
+#geoPanel.open #geoMap { height: min(52vh, 420px); }
+#geoTap {
+  position: absolute; inset: 0; z-index: 1200; border-radius: 10px; cursor: pointer;
+  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px;
+  font-size: 0.8rem; font-weight: 700; color: var(--text); text-shadow: 0 0 4px #000;
+}
+#geoPanel.open #geoTap { display: none; }
+#geoPanel:not(.open) .leaflet-control-zoom { display: none; }
+#geoPanel:not(.open) #geoMini, #geoPanel:not(.open) #geoFeedback,
+#geoPanel:not(.open) #geoConfirm, #geoPanel:not(.open) #geoNext,
+#geoPanel.done #geoMini { display: none !important; }
+#geoMini { align-self: flex-end; padding: 6px 14px; font-size: 0.85rem; background: var(--grey); }
+#geoFeedback { max-width: none; text-align: center; color: var(--text); }
+
+/* ---------- rose game ---------- */
+#roseView { max-width: 94vw; max-height: 52vh; overflow: auto; border-radius: 12px; scrollbar-width: none; }
+#roseView::-webkit-scrollbar { display: none; }
+#roseWrap { position: relative; width: calc(min(80vw, 300px) * var(--zoom, 1)); aspect-ratio: 1; }
+#roseGrid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(16, 1fr); gap: 1px; touch-action: none; user-select: none; }
+.cell { border-radius: 2px; background: #26385f; }
+.cell.hint { animation: glow 1s infinite; }
+.cell.nope { animation: wobble 0.4s; }
+@keyframes glow { 50% { box-shadow: 0 0 0 3px var(--pink); } }
+#roseImg { position: absolute; inset: 0; width: 100%; opacity: 0; transition: opacity 1.4s; pointer-events: none; }
+#roseWrap.done #roseImg { opacity: 1; }
+#palette { display: flex; gap: 8px; }
+.swatch { width: 38px; height: 38px; border-radius: 50%; border: 3px solid transparent; box-shadow: inset 0 0 0 1px var(--grey); cursor: pointer; transition: transform 0.2s, opacity 0.3s; }
+.swatch.sel { border-color: var(--text); transform: scale(1.15); }
+.swatch.done { opacity: 0.25; }
+#roseText { display: none; flex-direction: column; align-items: center; gap: 14px; }
+#rose.done #roseText { display: flex; animation: fadein 1s; }
+#rose.done #palette { display: none; }
+
+/* ---------- final message ---------- */
+.fade { opacity: 0; animation: fadein 1.2s forwards; }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
