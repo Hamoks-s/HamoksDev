@@ -1,8 +1,76 @@
+// ================= SOUND EFFECTS (made in code, no files needed) =================
+var SFX_VOLUME = 1;      // 0 = off, 1 = normal, 0.5 = half. All sounds are already quiet.
+var sfxCtx = null;
+function getCtx() {
+  if (!sfxCtx) {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    sfxCtx = new AC();
+  }
+  if (sfxCtx.state === 'suspended') sfxCtx.resume();
+  return sfxCtx;
+}
+// one beep: freq (Hz), delay and length (seconds), wave type, loudness, optional end frequency (slide)
+function tone(freq, delay, dur, type, vol, endFreq) {
+  var c = getCtx();
+  if (!c) return;
+  var t = c.currentTime + delay;
+  var o = c.createOscillator();
+  var g = c.createGain();
+  o.type = type || 'sine';
+  o.frequency.setValueAtTime(freq, t);
+  if (endFreq) o.frequency.exponentialRampToValueAtTime(endFreq, t + dur);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime((vol || 0.07) * SFX_VOLUME, t + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g);
+  g.connect(c.destination);
+  o.start(t);
+  o.stop(t + dur + 0.02);
+}
+var SFX = {
+  click:  function () { tone(520, 0, 0.06, 'sine', 0.05); },
+  tick:   function () { tone(880, 0, 0.05, 'sine', 0.05); },
+  whoosh: function () {                       // soft noise sweep for screen changes
+    var c = getCtx(); if (!c) return;
+    var len = Math.floor(c.sampleRate * 0.4);
+    var buf = c.createBuffer(1, len, c.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) { d[i] = Math.random() * 2 - 1; }
+    var src = c.createBufferSource(); src.buffer = buf;
+    var f = c.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 0.8;
+    var t = c.currentTime;
+    f.frequency.setValueAtTime(300, t); f.frequency.exponentialRampToValueAtTime(1800, t + 0.4);
+    var g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.06 * SFX_VOLUME, t + 0.15); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+    src.connect(f); f.connect(g); g.connect(c.destination); src.start(t);
+  },
+  splash: function () { tone(500, 0, 0.18, 'sine', 0.07, 140); },
+  catch:  function () { tone(660, 0, 0.1, 'triangle', 0.07); tone(990, 0.09, 0.14, 'triangle', 0.07); },
+  thump:  function () { tone(160, 0, 0.14, 'sine', 0.12, 70); },
+  pop:    function () { tone(300, 0, 0.1, 'sine', 0.1, 700); tone(1200, 0.08, 0.1, 'triangle', 0.04); tone(1600, 0.16, 0.12, 'triangle', 0.04); },
+  right:  function () { tone(660, 0, 0.1, 'triangle', 0.07); tone(880, 0.1, 0.16, 'triangle', 0.07); },
+  wrong:  function () { tone(220, 0, 0.2, 'sawtooth', 0.04, 150); },
+  soft:   function () { tone(330, 0, 0.18, 'sine', 0.06, 250); },
+  hit:    function () { tone(1040, 0, 0.06, 'triangle', 0.06); },
+  paint:  function () { tone(600 + Math.random() * 300, 0, 0.05, 'sine', 0.035); },
+  done:   function () { tone(523, 0, 0.12, 'triangle', 0.06); tone(659, 0.12, 0.12, 'triangle', 0.06); tone(784, 0.24, 0.22, 'triangle', 0.06); },
+  win:    function () { tone(523, 0, 0.12, 'triangle', 0.07); tone(659, 0.11, 0.12, 'triangle', 0.07); tone(784, 0.22, 0.12, 'triangle', 0.07); tone(1047, 0.33, 0.3, 'triangle', 0.07); }
+};
+function playSfx(name) { try { SFX[name](); } catch (err) {} }
+
+// soft click on every button (not the quiz answers or the music player, they have their own)
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button');
+  if (b && !b.closest('.answers') && !b.closest('#music')) playSfx('click');
+});
+
 // ================= SCREENS + INK TRANSITION =================
 var ink = document.getElementById('ink');
 var busy = false;
 
 function showScreen(id) {
+  document.getElementById('musicToggle').classList.toggle('pulse', id === 'musicTip');
   var screens = document.querySelectorAll('.screen');
   for (var i = 0; i < screens.length; i++) {
     screens[i].classList.remove('active');
@@ -46,22 +114,25 @@ function goTo(id, x, y) {
 // cover = album picture in the "img" folder (square works best)
 // Add or remove whole lines to change the playlist. Keep the comma after every line except the last.
 var SONGS = [
-  { title: 'R U Mine?', src: 'audio/r-u-mine.mp3', cover: 'img/album1.jpg' },
-  { title: 'Song 2', src: 'audio/song2.mp3', cover: 'img/album2.jpg' }
+  { title: 'R U Mine?', src: 'audio/r-u-mine.webm', cover: 'images/album1.png' },
+  { title: 'PRZY TOBIE', src: 'audio/APTEKARZE.webm', cover: 'images/album3.png' },
+  { title: 'ZA KAZDYM RA2EM', src: 'audio/za-kazdym-razem.webm', cover: 'images/album2.png' },
+  { title: 'KOLEJNA NOC', src: 'audio/kolejna-noc.webm', cover: 'images/album4.png' },
+  { title: 'Arabella', src: 'audio/Arabella.mp4', cover: 'images/album1.png' }
 ];
 
 var audio = new Audio();
 var songIndex = 0;
 var musicWrap = document.getElementById('music');
 var songTitle = document.getElementById('songTitle');
-var albumArt = document.getElementById('albumArt');
+var albumArt = document.querySelector('#albumArt img');
 var playPauseBtn = document.getElementById('playPause');
 
 function loadSong(index) {
   songIndex = (index + SONGS.length) % SONGS.length;
   audio.src = SONGS[songIndex].src;
   songTitle.textContent = SONGS[songIndex].title;
-  albumArt.style.backgroundImage = 'url(' + SONGS[songIndex].cover + ')';
+  albumArt.src = SONGS[songIndex].cover;
 }
 
 function playMusic() {
@@ -70,18 +141,28 @@ function playMusic() {
 }
 
 // Used later by the rhythm game: lockMusic(true) before it, lockMusic(false) after it
+var musicWasPlaying = false;
 function lockMusic(isLocked) {
   if (isLocked) {
+    musicWasPlaying = !audio.paused;
     audio.pause();
     musicWrap.style.display = 'none';
   } else {
     musicWrap.style.display = 'flex';
-    playMusic();
+    if (musicWasPlaying) { playMusic(); }
   }
 }
 
 document.getElementById('musicToggle').addEventListener('click', function () {
   document.getElementById('musicPanel').classList.toggle('open');
+});
+document.getElementById('startBtn').addEventListener('click', function (e) {
+  musicWrap.style.display = 'flex';
+  loadSong(0);            // loaded, but NOT playing. She turns it on herself.
+  goTo('musicTip', e.clientX, e.clientY);
+});
+document.getElementById('musicTipBtn').addEventListener('click', function (e) {
+  goTo('game', e.clientX, e.clientY);
 });
 playPauseBtn.addEventListener('click', function () {
   if (audio.paused) { playMusic(); } else { audio.pause(); }
@@ -107,8 +188,8 @@ audio.addEventListener('pause', function () { playPauseBtn.textContent = '▶'; 
 // ================= START BUTTON =================
 document.getElementById('startBtn').addEventListener('click', function (e) {
   musicWrap.style.display = 'flex';
+  
   loadSong(0);
-  playMusic(); // allowed here because it is triggered by her tap
   goTo('game', e.clientX, e.clientY);
 });
 
@@ -319,6 +400,7 @@ function update(dt) {
 
     // hit the octopus = win
     if (touchesOctopus()) {
+      playSfx("win")
       running = false;
       var r = canvas.getBoundingClientRect();
       goTo('reveal', r.left + r.width / 2, r.top + r.height / 2);
@@ -328,6 +410,7 @@ function update(dt) {
     for (i = 0; i < fishList.length; i++) {
       f = fishList[i];
       if (f.alive && overlaps(rodX - 1, hookY, 3, 3, f.x, f.y, 12, 5)) {
+        playSfx("catch")
         f.alive = false;
         f.respawnIn = 2.5;
         caughtFish = f;
@@ -345,6 +428,7 @@ function update(dt) {
         caughtCount++;
         document.getElementById('caughtText').textContent = 'Fish caught: ' + caughtCount;
         caughtFish = null;
+        
       }
     }
   }
@@ -377,7 +461,9 @@ function draw() {
   ctx.fillRect(x - 1, Math.round(hookY), 3, 3);
 
   // fish hanging on the hook
-  if (caughtFish) drawSprite(FISH_SPRITE, x - 6, hookY, caughtFish.color, caughtFish.dir === -1);
+  if (caughtFish) {
+    drawSprite(FISH_SPRITE, x - 6, hookY, caughtFish.color, caughtFish.dir === -1);
+  }
 }
 
 function setRod(e) {
@@ -392,6 +478,7 @@ var pressed = false;
 var dragged = false;
 
 function dropHook() {
+  playSfx("splash")
   if (hookState === 'idle') hookState = 'down';
 }
 
@@ -474,11 +561,13 @@ giftEl.addEventListener('click', function () {
   giftEl.classList.remove('tap1', 'tap2');
   if (giftTaps < 3) {
     giftEl.classList.add('tap' + giftTaps);     // lid opens a bit more with each tap
+    playSfx("click")
     giftHint.textContent = GIFT_HINTS[giftTaps];
     return;
   }
   giftHint.textContent = '';
   setTimeout(function () {
+    playSfx("win")
     launchConfetti();
     giftEl.classList.add('open');               // lid flies off, can comes out
     setTimeout(function () {
@@ -581,17 +670,21 @@ function pickAnswer(i, e) {
   var rightIndex = QUIZ[quizIndex].answer;
   quizAnswers.children[rightIndex].classList.add('right');
   if (i === rightIndex) {
+    playSfx("right")
     quizScore++;
   } else {
+    playSfx("wrong")
     quizAnswers.children[i].classList.add('wrong');
   }
   var x = e.clientX;
   var y = e.clientY;
   setTimeout(function () {
+    playSfx("whoosh")
     quizIndex++;
     if (quizIndex < QUIZ.length) {
       swapQuestion();
     } else {
+      playSfx("win")
       var result = QUIZ_RESULTS[quizScore];
       document.getElementById('quizGrade').textContent = result.grade;
       document.getElementById('quizScoreText').textContent = quizScore + ' / ' + QUIZ.length + ' correct';
@@ -612,14 +705,485 @@ document.getElementById('quizResultBtn').addEventListener('click', function (e) 
 // time = seconds from the start of the clip, lane = 0 (left), 1 (middle) or 2 (right).
 // The first note must be at 1.6 s or later, because notes need 1.6 s to fall.
 var NOTES = [
-  { time: 2.0, lane: 1 }, { time: 2.6, lane: 1 }, { time: 3.2, lane: 0 }, { time: 3.8, lane: 2 },
-  { time: 4.4, lane: 1 }, { time: 5.0, lane: 0 }, { time: 5.3, lane: 0 }, { time: 5.9, lane: 2 },
-  { time: 6.5, lane: 1 }, { time: 7.1, lane: 0 }, { time: 7.7, lane: 2 }, { time: 8.0, lane: 2 },
-  { time: 8.6, lane: 1 }, { time: 9.2, lane: 0 }, { time: 9.8, lane: 1 }, { time: 10.4, lane: 2 },
-  { time: 11.0, lane: 0 }, { time: 11.3, lane: 1 }, { time: 11.6, lane: 2 }, { time: 12.2, lane: 1 },
-  { time: 12.8, lane: 0 }, { time: 13.4, lane: 2 }, { time: 14.0, lane: 1 }, { time: 14.6, lane: 0 },
-  { time: 15.2, lane: 2 }, { time: 15.5, lane: 1 }, { time: 15.8, lane: 0 }, { time: 16.6, lane: 1 }
+  { time: 1.83, lane: 0 },
+{ time: 2.31, lane: 2 },
+{ time: 2.72, lane: 0 },
+{ time: 3.17, lane: 2 },
+{ time: 3.57, lane: 0 },
+{ time: 3.98, lane: 2 },
+{ time: 4.38, lane: 0 },
+{ time: 4.79, lane: 2 },
+{ time: 5.15, lane: 0 },
+{ time: 5.60, lane: 2 },
+{ time: 6.01, lane: 0 },
+{ time: 6.37, lane: 1 },
+{ time: 6.58, lane: 2 },
+{ time: 7.02, lane: 0 },
+{ time: 7.43, lane: 1 },
+{ time: 7.83, lane: 0 },
+{ time: 8.04, lane: 2 },
+{ time: 8.44, lane: 1 },
+{ time: 8.81, lane: 0 },
+{ time: 9.21, lane: 1 },
+{ time: 9.58, lane: 2 },
+{ time: 9.98, lane: 0 },
+{ time: 10.35, lane: 1 },
+{ time: 10.75, lane: 2 },
+{ time: 11.20, lane: 0 },
+{ time: 11.56, lane: 1 },
+{ time: 11.97, lane: 0 },
+{ time: 12.41, lane: 2 },
+{ time: 12.82, lane: 1 },
+{ time: 13.18, lane: 0 },
+{ time: 13.59, lane: 2 },
+{ time: 13.95, lane: 0 },
+{ time: 14.36, lane: 2 },
+{ time: 14.81, lane: 0 },
+{ time: 14.81, lane: 2 },
+{ time: 15.17, lane: 0 },
+{ time: 15.21, lane: 2 },
+{ time: 15.58, lane: 0 },
+{ time: 15.58, lane: 2 },
+{ time: 15.98, lane: 0 },
+{ time: 15.98, lane: 2 },
+{ time: 16.43, lane: 0 },
+{ time: 16.43, lane: 2 },
+{ time: 16.75, lane: 2 },
+{ time: 16.75, lane: 0 },
+{ time: 17.20, lane: 2 },
+{ time: 17.20, lane: 0 },
+{ time: 17.61, lane: 2 },
+{ time: 17.61, lane: 0 },
+{ time: 17.97, lane: 1 },
+{ time: 18.34, lane: 0 },
+{ time: 18.74, lane: 2 },
+{ time: 19.15, lane: 1 },
+{ time: 19.56, lane: 0 },
+{ time: 19.96, lane: 2 },
+{ time: 20.33, lane: 1 },
+{ time: 20.77, lane: 0 },
+{ time: 21.18, lane: 2 },
+{ time: 21.54, lane: 0 },
+{ time: 21.95, lane: 2 },
+{ time: 22.35, lane: 0 },
+{ time: 22.76, lane: 1 },
+{ time: 23.20, lane: 1 },
+{ time: 23.57, lane: 2 },
+{ time: 23.94, lane: 0 },
+{ time: 24.38, lane: 2 },
+{ time: 24.75, lane: 0 },
+{ time: 25.15, lane: 1 },
+{ time: 25.56, lane: 2 },
+{ time: 25.92, lane: 0 },
+{ time: 26.33, lane: 1 },
+{ time: 26.69, lane: 2 },
+{ time: 27.14, lane: 0 },
+{ time: 27.54, lane: 1 },
+{ time: 27.87, lane: 2 },
+{ time: 28.35, lane: 0 },
+{ time: 28.76, lane: 1 },
+{ time: 29.16, lane: 2 },
+{ time: 29.53, lane: 0 },
+{ time: 29.94, lane: 2 },
+{ time: 29.94, lane: 0 },
+{ time: 30.34, lane: 2 },
+{ time: 30.34, lane: 0 },
+{ time: 30.75, lane: 2 },
+{ time: 31.15, lane: 1 },
+{ time: 31.56, lane: 0 },
+{ time: 31.92, lane: 1 },
+{ time: 32.33, lane: 2 },
+{ time: 32.73, lane: 1 },
+{ time: 33.10, lane: 0 },
+{ time: 33.55, lane: 1 },
+{ time: 33.95, lane: 2 },
+{ time: 34.36, lane: 1 },
+{ time: 34.36, lane: 0 },
+{ time: 34.72, lane: 1 },
+{ time: 35.17, lane: 2 },
+{ time: 35.54, lane: 1 },
+{ time: 35.90, lane: 0 },
+{ time: 36.35, lane: 1 },
+{ time: 36.76, lane: 2 },
+{ time: 37.12, lane: 0 },
+{ time: 37.53, lane: 1 },
+{ time: 37.93, lane: 2 },
+{ time: 38.34, lane: 0 },
+{ time: 38.74, lane: 1 },
+{ time: 39.19, lane: 1 },
+{ time: 39.60, lane: 1 },
+{ time: 39.96, lane: 2 },
+{ time: 40.37, lane: 0 },
+{ time: 41.91, lane: 2 },
+{ time: 42.36, lane: 0 },
+{ time: 42.72, lane: 2 },
+{ time: 43.17, lane: 0 },
+{ time: 43.57, lane: 1 },
+{ time: 43.94, lane: 0 },
+{ time: 44.34, lane: 2 },
+{ time: 44.71, lane: 0 },
+{ time: 45.15, lane: 1 },
+{ time: 45.56, lane: 2 },
+{ time: 45.92, lane: 0 },
+{ time: 46.33, lane: 2 },
+{ time: 46.74, lane: 1 },
+{ time: 47.14, lane: 0 },
+{ time: 47.55, lane: 0 },
+{ time: 47.91, lane: 2 },
+{ time: 48.32, lane: 2 },
+{ time: 48.32, lane: 0 },
+{ time: 48.76, lane: 2 },
+{ time: 48.76, lane: 0 },
+{ time: 49.17, lane: 0 },
+{ time: 49.17, lane: 2 },
+{ time: 49.58, lane: 0 },
+{ time: 49.58, lane: 2 },
+{ time: 49.94, lane: 0 },
+{ time: 49.94, lane: 2 },
+{ time: 50.35, lane: 2 },
+{ time: 50.35, lane: 0 },
+{ time: 50.75, lane: 1 },
+{ time: 51.12, lane: 0 },
+{ time: 51.53, lane: 2 },
+{ time: 51.93, lane: 1 },
+{ time: 52.30, lane: 0 },
+{ time: 52.70, lane: 2 },
+{ time: 53.11, lane: 1 },
+{ time: 56.27, lane: 0 },
+{ time: 56.64, lane: 2 },
+{ time: 57.05, lane: 1 },
+{ time: 57.45, lane: 0 },
+{ time: 57.82, lane: 2 },
+{ time: 58.26, lane: 1 },
+{ time: 58.63, lane: 0 },
+{ time: 59.07, lane: 1 },
+{ time: 59.44, lane: 2 },
+{ time: 59.84, lane: 1 },
+{ time: 60.25, lane: 0 },
+{ time: 60.61, lane: 2 },
+{ time: 61.02, lane: 1 },
+{ time: 61.43, lane: 0 },
+{ time: 61.83, lane: 1 },
+{ time: 62.20, lane: 2 },
+{ time: 62.60, lane: 1 },
+{ time: 63.01, lane: 0 },
+{ time: 63.45, lane: 1 },
+{ time: 63.82, lane: 2 },
+{ time: 64.22, lane: 1 },
+{ time: 64.59, lane: 0 },
+{ time: 65.00, lane: 1 },
+{ time: 65.40, lane: 2 },
+{ time: 65.81, lane: 1 },
+{ time: 66.21, lane: 0 },
+{ time: 66.62, lane: 1 },
+{ time: 66.98, lane: 2 },
+{ time: 67.39, lane: 1 },
+{ time: 67.83, lane: 0 }
 ];
+
+var NOTES2 = [
+  { time: 2.81, lane: 2 },
+{ time: 3.25, lane: 0 },
+{ time: 4.59, lane: 2 },
+{ time: 5.04, lane: 0 },
+{ time: 7.39, lane: 2 },
+{ time: 7.76, lane: 0 },
+{ time: 9.26, lane: 2 },
+{ time: 9.70, lane: 0 },
+{ time: 11.73, lane: 1 },
+{ time: 12.18, lane: 2 },
+{ time: 13.92, lane: 0 },
+{ time: 14.44, lane: 2 },
+{ time: 16.35, lane: 1 },
+{ time: 16.88, lane: 2 },
+{ time: 17.85, lane: 0 },
+{ time: 19.23, lane: 2 },
+{ time: 19.80, lane: 0 },
+{ time: 21.51, lane: 2 },
+{ time: 23.05, lane: 1 },
+{ time: 23.53, lane: 0 },
+{ time: 24.91, lane: 2 },
+{ time: 25.36, lane: 1 },
+{ time: 25.93, lane: 0 },
+{ time: 27.35, lane: 2 },
+{ time: 28.28, lane: 0 },
+{ time: 28.72, lane: 2 },
+{ time: 29.21, lane: 1 },
+{ time: 30.67, lane: 0 },
+{ time: 31.12, lane: 2 },
+{ time: 31.60, lane: 0 },
+{ time: 32.09, lane: 1 },
+{ time: 32.54, lane: 2 },
+{ time: 32.98, lane: 0 },
+{ time: 33.47, lane: 1 },
+{ time: 33.96, lane: 2 },
+{ time: 34.44, lane: 0 },
+{ time: 34.89, lane: 1 },
+{ time: 35.34, lane: 0 },
+{ time: 35.82, lane: 2 },
+{ time: 36.31, lane: 0 },
+{ time: 36.76, lane: 1 },
+{ time: 37.24, lane: 2 },
+{ time: 37.73, lane: 0 },
+{ time: 38.22, lane: 2 },
+{ time: 38.71, lane: 1 },
+{ time: 39.19, lane: 0 },
+{ time: 39.68, lane: 2 },
+{ time: 40.13, lane: 0 },
+{ time: 40.61, lane: 2 },
+{ time: 41.06, lane: 0 },
+{ time: 41.59, lane: 1 },
+{ time: 42.07, lane: 2 },
+{ time: 42.52, lane: 0 },
+{ time: 43.05, lane: 1 },
+{ time: 43.66, lane: 1 },
+{ time: 44.43, lane: 0 },
+{ time: 45.00, lane: 2 },
+{ time: 45.52, lane: 0 },
+{ time: 46.37, lane: 0 },
+{ time: 46.98, lane: 0 },
+{ time: 47.47, lane: 0 },
+{ time: 48.28, lane: 0 },
+{ time: 49.13, lane: 2 },
+{ time: 49.66, lane: 2 },
+{ time: 50.15, lane: 2 },
+{ time: 50.59, lane: 0 },
+{ time: 51.12, lane: 2 },
+{ time: 51.57, lane: 0 },
+{ time: 52.06, lane: 2 },
+{ time: 52.58, lane: 1 },
+{ time: 53.03, lane: 0 },
+{ time: 53.48, lane: 2 },
+{ time: 54.00, lane: 1 },
+{ time: 54.45, lane: 0 },
+{ time: 54.94, lane: 2 },
+{ time: 55.42, lane: 1 },
+{ time: 55.91, lane: 0 },
+{ time: 56.40, lane: 0 },
+{ time: 56.88, lane: 0 },
+{ time: 57.74, lane: 2 },
+{ time: 58.26, lane: 2 },
+{ time: 58.75, lane: 0 },
+{ time: 59.20, lane: 2 },
+{ time: 59.65, lane: 0 },
+{ time: 60.13, lane: 2 },
+{ time: 60.66, lane: 1 },
+{ time: 61.10, lane: 0 },
+{ time: 61.59, lane: 2 },
+{ time: 62.08, lane: 0 },
+{ time: 62.52, lane: 1 },
+{ time: 63.46, lane: 2 },
+{ time: 63.98, lane: 0 },
+{ time: 64.51, lane: 2 },
+{ time: 64.96, lane: 1 },
+{ time: 65.40, lane: 0 },
+{ time: 65.89, lane: 2 },
+{ time: 66.34, lane: 1 },
+{ time: 66.78, lane: 0 },
+{ time: 67.27, lane: 2 },
+{ time: 68.12, lane: 0 },
+{ time: 68.69, lane: 2 },
+{ time: 69.18, lane: 0 },
+{ time: 69.66, lane: 2 },
+{ time: 70.11, lane: 1 },
+{ time: 70.63, lane: 0 },
+{ time: 71.08, lane: 2 },
+{ time: 71.61, lane: 0 },
+{ time: 72.10, lane: 1 },
+{ time: 72.54, lane: 1 },
+{ time: 73.03, lane: 1 },
+{ time: 73.48, lane: 0 },
+{ time: 73.96, lane: 2 },
+{ time: 74.45, lane: 0 },
+{ time: 74.90, lane: 1 },
+{ time: 75.34, lane: 0 },
+{ time: 75.83, lane: 2 },
+{ time: 76.27, lane: 1 },
+{ time: 76.84, lane: 0 }
+]
+
+var NOTES3 = [
+  { time: 2.16, lane: 1 },
+{ time: 3.49, lane: 0 },
+{ time: 3.90, lane: 2 },
+{ time: 4.55, lane: 0 },
+{ time: 5.16, lane: 2 },
+{ time: 5.76, lane: 0 },
+{ time: 6.74, lane: 2 },
+{ time: 7.59, lane: 0 },
+{ time: 8.16, lane: 2 },
+{ time: 8.81, lane: 0 },
+{ time: 9.42, lane: 2 },
+{ time: 10.07, lane: 0 },
+{ time: 10.71, lane: 2 },
+{ time: 11.85, lane: 0 },
+{ time: 12.50, lane: 2 },
+{ time: 13.11, lane: 0 },
+{ time: 13.80, lane: 2 },
+{ time: 14.37, lane: 0 },
+{ time: 15.02, lane: 1 },
+{ time: 15.67, lane: 2 },
+{ time: 16.27, lane: 1 },
+{ time: 17.00, lane: 1 },
+{ time: 17.57, lane: 0 },
+{ time: 18.22, lane: 2 },
+{ time: 18.87, lane: 1 },
+{ time: 19.40, lane: 0 },
+{ time: 20.01, lane: 2 },
+{ time: 20.57, lane: 1 },
+{ time: 21.18, lane: 0 },
+{ time: 21.83, lane: 2 },
+{ time: 22.57, lane: 1 },
+{ time: 23.17, lane: 1 },
+{ time: 23.82, lane: 1 },
+{ time: 24.35, lane: 2 },
+{ time: 24.92, lane: 1 },
+{ time: 25.57, lane: 0 },
+{ time: 26.18, lane: 2 },
+{ time: 26.79, lane: 1 },
+{ time: 27.43, lane: 0 },
+{ time: 28.08, lane: 1 },
+{ time: 28.65, lane: 2 },
+{ time: 28.93, lane: 1 },
+{ time: 29.14, lane: 0 },
+{ time: 29.42, lane: 2 },
+{ time: 30.07, lane: 1 },
+{ time: 30.60, lane: 0 },
+{ time: 31.13, lane: 1 },
+{ time: 31.73, lane: 2 },
+{ time: 32.26, lane: 1 },
+{ time: 32.83, lane: 0 },
+{ time: 33.40, lane: 1 },
+{ time: 33.68, lane: 2 },
+{ time: 33.89, lane: 0 },
+{ time: 34.05, lane: 1 },
+{ time: 34.90, lane: 2 },
+{ time: 35.47, lane: 1 },
+{ time: 36.08, lane: 0 },
+{ time: 36.64, lane: 1 },
+{ time: 37.17, lane: 2 },
+{ time: 37.73, lane: 1 },
+{ time: 38.38, lane: 0 },
+{ time: 39.12, lane: 1 },
+{ time: 39.68, lane: 2 },
+{ time: 40.33, lane: 1 },
+{ time: 41.02, lane: 0 },
+{ time: 41.71, lane: 0 },
+{ time: 42.32, lane: 2 },
+{ time: 42.92, lane: 1 },
+{ time: 43.45, lane: 0 },
+{ time: 44.06, lane: 2 },
+{ time: 44.75, lane: 0 },
+{ time: 45.36, lane: 1 },
+{ time: 45.97, lane: 2 },
+{ time: 46.54, lane: 1 },
+{ time: 47.14, lane: 0 },
+{ time: 47.79, lane: 2 },
+{ time: 48.40, lane: 1 },
+{ time: 48.97, lane: 0 },
+{ time: 49.58, lane: 1 },
+{ time: 50.27, lane: 2 },
+{ time: 50.88, lane: 1 },
+{ time: 51.53, lane: 0 },
+{ time: 52.18, lane: 1 },
+{ time: 52.75, lane: 2 },
+{ time: 53.32, lane: 1 },
+{ time: 53.93, lane: 0 },
+{ time: 54.62, lane: 1 },
+{ time: 55.26, lane: 2 },
+{ time: 55.91, lane: 1 },
+{ time: 56.52, lane: 2 },
+{ time: 57.13, lane: 0 },
+{ time: 57.78, lane: 2 },
+{ time: 58.35, lane: 0 },
+{ time: 58.95, lane: 2 },
+{ time: 59.52, lane: 1 },
+{ time: 60.13, lane: 0 },
+{ time: 60.78, lane: 2 },
+{ time: 61.39, lane: 1 },
+{ time: 61.99, lane: 0 },
+{ time: 62.64, lane: 1 },
+{ time: 63.25, lane: 0 },
+{ time: 63.86, lane: 2 },
+{ time: 64.51, lane: 1 },
+{ time: 65.20, lane: 0 },
+{ time: 66.33, lane: 2 },
+{ time: 67.06, lane: 0 },
+{ time: 67.67, lane: 2 },
+{ time: 68.36, lane: 0 },
+{ time: 68.89, lane: 2 },
+{ time: 69.50, lane: 1 },
+{ time: 70.11, lane: 1 },
+{ time: 70.72, lane: 2 },
+{ time: 71.36, lane: 0 },
+{ time: 71.97, lane: 2 },
+{ time: 72.62, lane: 0 },
+{ time: 73.23, lane: 2 },
+{ time: 73.80, lane: 0 },
+{ time: 74.40, lane: 1 },
+{ time: 75.05, lane: 1 },
+{ time: 75.70, lane: 1 },
+{ time: 76.31, lane: 2 },
+{ time: 76.92, lane: 0 },
+{ time: 77.53, lane: 2 },
+{ time: 78.14, lane: 0 },
+{ time: 78.79, lane: 2 },
+{ time: 79.40, lane: 0 },
+{ time: 79.96, lane: 1 },
+{ time: 80.61, lane: 1 },
+{ time: 81.22, lane: 0 },
+{ time: 81.87, lane: 2 },
+{ time: 82.11, lane: 1 },
+{ time: 82.44, lane: 0 },
+{ time: 83.13, lane: 2 },
+{ time: 83.37, lane: 1 },
+{ time: 83.66, lane: 0 },
+{ time: 83.98, lane: 1 },
+{ time: 84.30, lane: 2 },
+{ time: 84.63, lane: 1 },
+{ time: 84.95, lane: 0 },
+{ time: 85.23, lane: 1 },
+{ time: 85.80, lane: 2 },
+{ time: 86.37, lane: 1 },
+{ time: 86.74, lane: 0 },
+{ time: 87.02, lane: 1 },
+{ time: 87.63, lane: 2 },
+{ time: 87.95, lane: 1 },
+{ time: 88.32, lane: 0 },
+{ time: 88.60, lane: 1 },
+{ time: 89.37, lane: 2 },
+{ time: 89.65, lane: 1 },
+{ time: 89.90, lane: 0 },
+{ time: 90.22, lane: 1 },
+{ time: 90.83, lane: 2 },
+{ time: 91.35, lane: 1 },
+{ time: 91.88, lane: 0 },
+{ time: 92.29, lane: 1 },
+{ time: 92.69, lane: 2 },
+{ time: 92.94, lane: 1 },
+{ time: 93.22, lane: 0 },
+{ time: 93.54, lane: 1 },
+{ time: 94.19, lane: 2 },
+{ time: 94.76, lane: 1 },
+{ time: 95.41, lane: 0 },
+{ time: 95.94, lane: 1 },
+{ time: 96.63, lane: 2 },
+{ time: 97.24, lane: 1 },
+{ time: 97.84, lane: 0 },
+{ time: 98.45, lane: 1 },
+{ time: 99.02, lane: 2 },
+{ time: 99.71, lane: 1 },
+{ time: 100.40, lane: 1 },
+{ time: 101.01, lane: 2 },
+{ time: 101.58, lane: 0 },
+{ time: 102.23, lane: 1 },
+{ time: 102.79, lane: 2 },
+{ time: 103.36, lane: 0 },
+{ time: 104.01, lane: 1 },
+{ time: 104.66, lane: 0 },
+{ time: 105.39, lane: 2 }
+]
+
 // TEST notes for songs 2 and 3 (a steady pattern). The recorder tool will replace them later.
 function makeTestNotes(step, count) {
   var lanes = [1, 0, 2, 1, 2, 0];
@@ -628,13 +1192,12 @@ function makeTestNotes(step, count) {
   return list;
 }
 
-// ===== EDIT HERE: songs she can choose from in the rhythm game =====
 // title = button text, src = clip in the "audio" folder (cut the part you want, 20-40 s is enough),
 // notes = the list from recorder.html (replace NOTES / makeTestNotes(...) with the pasted list: notes: [ ... ]).
 var RHYTHM_SONGS = [
-  { title: 'Song 1', src: 'audio/rhythm1.mp3', notes: NOTES },
-  { title: 'Song 2', src: 'audio/rhythm2.mp3', notes: makeTestNotes(0.45, 36) },
-  { title: 'Song 3', src: 'audio/rhythm3.mp3', notes: makeTestNotes(0.75, 22) }
+  { title: 'ZA KAZDYM RA2EM (Easy)', src: 'audio/za-kazdym-razem.m4a', notes: NOTES2 },
+  { title: 'R U Mine? (Medium)', src: 'audio/r-u-mine.m4a', notes: NOTES3 },
+  { title: 'Kawalek do tanca (Hard)', src: 'audio/kawalek-do-tanca.m4a', notes: NOTES }
 ];
 
 // build the song buttons on the selection screen
@@ -739,6 +1302,7 @@ rCanvas.addEventListener('pointerdown', function (e) {
       bestDiff = diff;
     }
   }
+  playSfx("click")
   if (best) {
     best.state = 1;
     if (bestDiff <= PERFECT_WINDOW) { rStats.perfect++; showFeedback('Perfect!'); }
@@ -759,7 +1323,7 @@ function rhythmLoop() {
   }
   drawRhythm(t);
   var lastNote = rNotes[rNotes.length - 1].time;
-  if (t > lastNote + 1.5) {
+  if (t > lastNote) {
     finishRhythm();
   } else {
     requestAnimationFrame(rhythmLoop);
@@ -818,6 +1382,7 @@ function finishRhythm() {
   rRunning = false;
   rAudio.pause();
   lockMusic(false);                      // background music comes back
+  playSfx("win")
   var total = rNotes.length;
   var hits = rStats.perfect + rStats.good;
   var percent = Math.round(hits / total * 100);
@@ -869,8 +1434,8 @@ var SPOTS = [
 // --- rules, tweak here ---
 var ROUNDS = 3;              // places per attempt
 var PASS_DISTANCE = 300;     // meters: a guess this close counts as "close enough"
-var ROUNDS_NEEDED = 2;       // how many close guesses she needs to pass the attempt
-var SHOW_ANSWER_HINT = false; // true = shows the right spot on the map before she guesses. Only for testing your coordinates, keep it false for her!
+var ROUNDS_NEEDED = 2;       // how many close guesses  needs to pass the attempt
+var SHOW_ANSWER_HINT = false; // true = shows the right spot on the map before  guesses. Only for testing your coordinates, keep it false for her!
 // -------------------------
 var MAP_CENTER = [53.5625, 20.9917];
 
@@ -1167,6 +1732,7 @@ function paintAt(e, isTap) {
     document.querySelector('.swatch[data-color="' + rosePicked + '"]').classList.add('done');
   }
   if (roseLeft === 0) {
+    playSfx("win")
     roseHint.textContent = '';
     setTimeout(function () {
       setZoom(1);
@@ -1207,4 +1773,26 @@ window.addEventListener('pointercancel', endTouch);
 
 document.getElementById('roseBtn').addEventListener('click', function (e) {
   goTo('final', e.clientX, e.clientY);
+});
+
+var seek = document.getElementById('seek');
+var timeNow = document.getElementById('timeNow');
+var timeTotal = document.getElementById('timeTotal');
+var seeking = false;
+function fmt(s) { if (!isFinite(s)) return '0:00'; var r = Math.floor(s % 60); return Math.floor(s / 60) + ':' + (r < 10 ? '0' : '') + r; }
+function paintSeek(pct) { seek.value = pct; seek.style.setProperty('--pct', pct + '%'); }
+audio.addEventListener('timeupdate', function () {
+  if (seeking || !audio.duration) return;
+  paintSeek(audio.currentTime / audio.duration * 100);
+  timeNow.textContent = fmt(audio.currentTime);
+});
+audio.addEventListener('loadedmetadata', function () { timeTotal.textContent = fmt(audio.duration); paintSeek(0); timeNow.textContent = '0:00'; });
+seek.addEventListener('input', function () {
+  seeking = true;
+  paintSeek(seek.value);
+  if (audio.duration) timeNow.textContent = fmt(seek.value / 100 * audio.duration);
+});
+seek.addEventListener('change', function () {
+  if (audio.duration) audio.currentTime = seek.value / 100 * audio.duration;
+  seeking = false;
 });

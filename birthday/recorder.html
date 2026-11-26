@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Rhythm note recorder</title>
+<style>
+body { margin: 0 auto; padding: 16px; max-width: 640px; background: #0b1426; color: #e8ebf2; font-family: system-ui, sans-serif; }
+h1 { font-size: 1.3rem; color: #ff8fb8; }
+button, select, input { font: inherit; padding: 10px 14px; border-radius: 10px; border: 0; }
+button { background: #ff8fb8; color: #0b1426; font-weight: 700; cursor: pointer; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 10px 0; }
+#pads { display: flex; gap: 8px; margin: 14px 0; }
+#pads button { flex: 1; height: 140px; font-size: 1.4rem; background: #16233f; color: #e8ebf2; border: 2px solid #8b94a5; touch-action: manipulation; user-select: none; }
+#pads button.hit { background: #ff8fb8; color: #0b1426; }
+textarea { width: 100%; height: 220px; box-sizing: border-box; padding: 10px; background: #16233f; color: #e8ebf2; border: 1px solid #8b94a5; border-radius: 10px; font-family: monospace; }
+input[type=number] { width: 90px; }
+.small { color: #8b94a5; font-size: 0.9rem; }
+#info { color: #ffd166; }
+</style>
+</head>
+<body>
+<h1>Rhythm note recorder</h1>
+<p class="small">
+  1. Choose the same clip you put in the audio folder. 2. Press Record and tap the three pads (keys A, S, D) in time with the song.
+  3. Press Preview to check it, fix single numbers in the box if needed. 4. Copy the list and paste it between the
+  brackets of <code>notes: [ ... ]</code> of that song in script.js (RHYTHM_SONGS). Do one song at a time.
+</p>
+
+<div class="row">
+  <input type="file" id="file" accept="audio/*">
+</div>
+<div class="row">
+  <button id="record">Record</button>
+  <button id="preview">Preview</button>
+  <button id="pause">Pause / Continue</button>
+  <span id="time">0.00 s</span>
+</div>
+<div class="row">
+  <label>Speed
+    <select id="speed">
+      <option value="0.5">0.5x (easiest to record)</option>
+      <option value="0.75">0.75x</option>
+      <option value="1" selected>1x</option>
+    </select>
+  </label>
+  <label>Tap delay fix (ms) <input type="number" id="offset" value="0" min="0" max="300" step="10"></label>
+</div>
+<p class="small">Tap delay fix: if you tap a bit late on average, raise this (try 60 to 100). Check with Preview.</p>
+
+<div id="pads">
+  <button data-lane="0">LEFT (A)</button>
+  <button data-lane="1">MIDDLE (S)</button>
+  <button data-lane="2">RIGHT (D)</button>
+</div>
+
+<div class="row">
+  <button id="undo">Undo last</button>
+  <button id="clear">Clear all</button>
+  <button id="copy">Copy list</button>
+  <span id="info"></span>
+</div>
+<textarea id="out" spellcheck="false" placeholder="Recorded notes appear here"></textarea>
+
+<script>
+var $ = function (id) { return document.getElementById(id); };
+var audio = new Audio();
+var notes = [];
+var recording = false;
+var lastTime = 0;
+var pads = document.querySelectorAll('#pads button');
+
+function flash(lane) {
+  pads[lane].classList.add('hit');
+  setTimeout(function () { pads[lane].classList.remove('hit'); }, 120);
+}
+function info() {
+  var text = notes.length + ' notes';
+  if (notes.length && Math.min.apply(null, notes.map(function (n) { return n.time; })) < 1.6) {
+    text += ' | WARNING: the first note must be at 1.6 s or later';
+  }
+  $('info').textContent = text;
+}
+function show() {
+  notes.sort(function (a, b) { return a.time - b.time; });
+  $('out').value = notes.map(function (n) { return '{ time: ' + n.time.toFixed(2) + ', lane: ' + n.lane + ' }'; }).join(',\n');
+  info();
+}
+function tap(lane) {
+  flash(lane);
+  if (!recording || audio.paused) return;
+  var delay = (parseFloat($('offset').value) || 0) / 1000 * audio.playbackRate;
+  var t = Math.max(0, audio.currentTime - delay);
+  notes.push({ time: Math.round(t * 100) / 100, lane: lane });
+  show();
+}
+function start(isRecording) {
+  if (!audio.src) { alert('Choose the audio file first.'); return; }
+  recording = isRecording;
+  audio.playbackRate = parseFloat($('speed').value);
+  audio.currentTime = 0;
+  lastTime = 0;
+  audio.play();
+}
+
+$('file').onchange = function () { audio.src = URL.createObjectURL(this.files[0]); };
+$('speed').onchange = function () { audio.playbackRate = parseFloat(this.value); };
+$('record').onclick = function () { start(true); };
+$('preview').onclick = function () { start(false); };
+$('pause').onclick = function () { if (audio.paused) { audio.play(); } else { audio.pause(); } };
+$('undo').onclick = function () { notes.pop(); show(); };
+$('clear').onclick = function () { if (confirm('Delete all notes?')) { notes = []; show(); } };
+$('copy').onclick = function () {
+  $('out').select();
+  document.execCommand('copy');
+  $('info').textContent = 'Copied!';
+};
+$('out').oninput = function () {   // you can edit the list by hand
+  notes = [];
+  var re = /time:\s*([\d.]+)\s*,\s*lane:\s*(\d)/g, m;
+  while ((m = re.exec(this.value))) { notes.push({ time: parseFloat(m[1]), lane: parseInt(m[2], 10) }); }
+  info();
+};
+audio.onended = function () { recording = false; $('info').textContent = 'Song ended. Copy the list.'; };
+
+for (var i = 0; i < pads.length; i++) {
+  pads[i].addEventListener('pointerdown', function (e) { e.preventDefault(); tap(parseInt(this.dataset.lane, 10)); });
+}
+window.addEventListener('keydown', function (e) {
+  var lane = { a: 0, s: 1, d: 2 }[e.key.toLowerCase()];
+  if (lane !== undefined && !e.repeat && e.target.tagName !== 'TEXTAREA') tap(lane);
+});
+
+function loop() {   // preview: flash the pad when a note time passes
+  var t = audio.currentTime;
+  if (!audio.paused && !recording) {
+    for (var k = 0; k < notes.length; k++) {
+      if (notes[k].time > lastTime && notes[k].time <= t) flash(notes[k].lane);
+    }
+  }
+  lastTime = t;
+  $('time').textContent = t.toFixed(2) + ' s';
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>

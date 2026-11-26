@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -11,15 +11,22 @@
 
 <!-- 1. START -->
 <section class="screen active" id="start">
-  <h1>Hey!</h1>
-  <p>I made a little adventure for you. A few tasks and a couple of surprises.</p>
-  <button id="startBtn">Let's start</button>
+  <h1>Hello Alexandra!!!</h1>
+  <p>I made a little adventure for you. Hope you enjoy it ;)</p>
+  <button id="startBtn">Start</button>
+</section>
+
+<section class="screen" id="musicTip">
+  <svg class="tip-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>
+  <h2>Reminder: there is a music player</h2>
+  <p>Tap the ♫ button in the top right corner to open it, and press play whenever you want music</p>
+  <button id="musicTipBtn">Got it</button>
 </section>
 
 <!-- 2. FISHING GAME -->
 <section class="screen" id="game">
   <h2>Catch the octopus</h2>
-  <p class="small">Drag to move the boat. Tap the lake or the button to drop the hook. The octopuses live at the very bottom.</p>
+  <p class="small">Drag to move the boat. Tap the lake or the button to drop the hook</p>
   <canvas id="lake"></canvas>
   <button id="dropBtn">Drop the hook</button>
   <p class="small" id="caughtText">Fish caught: 0</p>
@@ -31,8 +38,8 @@
   <div class="img-slot">
     <img src="images/octopus.jpg">
   </div>
-  <h2>You did it!</h2>
-  <p>Your text about the octopus goes here.</p>
+  <h2>You did it! Your amazing!</h2>
+  <p>Enjoy this cute octopus photo as a reward :D</p>
   <button id="revealBtn">Continue</button>
 </section>
 
@@ -50,7 +57,7 @@
     <div class="lid"><div class="bow"></div></div>
   </div>
   <div id="giftText">
-    <h2>Gives you wings</h2>
+    <h2>For you princess XD</h2>
     <button id="giftBtn">Continue</button>
   </div>
 </section>
@@ -80,13 +87,13 @@
 <!-- 6b. RHYTHM SONG SELECT -->
 <section class="screen" id="rhythmSelect">
   <h2>Pick a song</h2>
-  <p class="small">Choose the one you want to play.</p>
+  <p class="small">Choose a song you want to play.</p>
   <div class="answers" id="songList"></div>
 </section>
 
 <!-- 7. RHYTHM GAME -->
 <section class="screen" id="rhythm">
-  <p class="small" id="rhythmInfo">Tap the lane when a note reaches the line. You can't lose, only score.</p>
+  <p class="small" id="rhythmInfo">Tap the lane when a note reaches the line. Dont worry, you cant loose, no stress :)</p>
   <canvas id="rhythmCanvas" width="360" height="480"></canvas>
   <button id="rhythmStart">Start</button>
 </section>
@@ -105,7 +112,9 @@
 <!-- 9a. SZCZYTNO INTRO -->
 <section class="screen" id="geoIntro">
   <h1>Do you know Szczytno?</h1>
-  <p>Placeholder intro text. You will see a few photos from around town. Find each place on the map.</p>
+  <p>I will show you random places in szczytno and you guess on the map where it is!</p>
+  <div class="flip-phone"></div>
+  <p><b>Flip your phone sideways</b> for this game so you can see the images clearly</p>
   <button id="geoStartBtn">Start</button>
 </section>
 
@@ -149,7 +158,7 @@
   </div>
   <div id="palette"></div>
   <div id="roseText">
-    <p>Your text about the roses goes here.</p>
+    <p>Here is your flower baby girl</p>
     <button id="roseBtn">Continue</button>
   </div>
 </section>
@@ -157,25 +166,33 @@
 <!-- 12. FINAL MESSAGE -->
 <section class="screen" id="final">
   <h1 class="fade">Happy Birthday!</h1>
-  <p class="fade" style="animation-delay: 1s">First line of your message goes here.</p>
-  <p class="fade" style="animation-delay: 2.2s">Second line of your message goes here.</p>
-  <p class="fade" style="animation-delay: 3.4s">Last line, and your name.</p>
+  <p class="fade" style="animation-delay: 1s">Congratulations on surviving for 17 years XD</p>
+  <p class="fade" style="animation-delay: 2.2s">We know eachother for 11 months, and ever since then, im happy when talking to you :)</p>
+  <p class="fade" style="animation-delay: 3.4s">I hope i can celebrate your 18th birthday in person XD have a nice day and enjoy that party with friends</p>
 </section>
 
 <!-- (old placeholder) -->
 
 <!-- music player (whole page) -->
-<div id="music">
+ <div id="music">
   <button id="musicToggle" aria-label="Music">♫</button>
   <div id="musicPanel">
     <p id="songTitle"></p>
-    <div class="img-slot album" id="albumArt"></div>
+    <div id="albumArt" class="album">
+      <img>
+    </div>
+    <p id="songTitle"></p>
+    <div class="seekRow">
+      <span id="timeNow">0:00</span>
+      <input type="range" id="seek" min="0" max="100" step="0.1" value="0">
+      <span id="timeTotal">0:00</span>
+    </div>
     <div class="controls">
-      <button id="back10">−10</button>
-      <button id="playPause">▶</button>
-      <button id="fwd10">+10</button>
-      <button id="stopBtn">■</button>
-      <button id="nextBtn">⏭</button>
+      <button id="stopBtn" class="ib" aria-label="Stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></button>
+      <button id="back10" class="ib" aria-label="Back 10 seconds"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/><text x="12" y="17" font-size="7" font-weight="700" text-anchor="middle" fill="currentColor">10</text></svg></button>
+      <button id="playPause" class="ib big">▶︎</button>
+      <button id="fwd10" class="ib" aria-label="Forward 10 seconds"><svg viewBox="0 0 24 24"><path d="M12 5V2l5 4-5 4V7a6 6 0 1 0 6 6h2a8 8 0 1 1-8-8z"/><text x="12" y="17" font-size="7" font-weight="700" text-anchor="middle" fill="currentColor">10</text></svg></button>
+      <button id="nextBtn" class="ib" aria-label="Next song"><svg viewBox="0 0 24 24"><path d="M6 6l9 6-9 6z"/><rect x="16" y="6" width="2.5" height="12"/></svg></button>
     </div>
   </div>
 </div>

@@ -99,14 +99,38 @@ button:active { transform: scale(0.96); }
 }
 #musicPanel.open { display: block; }
 #songTitle { margin-bottom: 10px; font-size: 0.95rem; max-width: none; }
-.controls { display: flex; gap: 6px; }
-.controls button {
-  flex: 1;
-  min-height: 44px;
-  padding: 0;
-  font-size: 0.9rem;
-  background: var(--grey);
+#albumArt {
+  aspect-ratio: 1;
+  background: var(--navy);
+  overflow: hidden;
+  display: flex;
 }
+
+#albumArt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.seekRow { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.75rem; color: var(--grey); }
+.seekRow span { min-width: 32px; }
+#seek {
+  flex: 1; -webkit-appearance: none; appearance: none; margin: 0; outline: none;
+  height: 20px; padding: 8px 0; background-clip: content-box; border-radius: 2px;
+  background-color: transparent;
+  background-image: linear-gradient(to right, var(--pink) var(--pct, 0%), rgba(255,255,255,0.2) var(--pct, 0%));
+}
+#seek::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 0; }
+#seek::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 0; }
+.controls { display: flex; align-items: center; justify-content: center; gap: 6px; }
+.controls .ib { width: 40px; height: 40px; min-height: 0; padding: 0; border-radius: 50%; background: transparent; color: var(--text); display: flex; align-items: center; justify-content: center; flex: none; }
+.controls .ib svg { width: 24px; height: 24px; fill: currentColor; }
+.controls .ib:active { background: rgba(255,255,255,0.12); }
+.controls .ib.big { width: 52px; height: 52px; background: var(--pink); color: var(--navy); font-size: 1.2rem; }
+.tip-arrow { position: absolute; top: calc(62px + env(safe-area-inset-top, 0px)); right: 20px; width: 44px; height: 44px; fill: none; stroke: var(--pink); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; animation: nudge 1s ease-in-out infinite; }
+@keyframes nudge { 50% { transform: translate(5px, -5px); } }
+#musicToggle.pulse { animation: pulse 1.2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,143,184,0.7); } 100% { box-shadow: 0 0 0 14px rgba(255,143,184,0); } }
 
 /* ---------- fishing game ---------- */
 #lake {
@@ -116,6 +140,10 @@ button:active { transform: scale(0.96); }
   image-rendering: pixelated;
   touch-action: none;
 }
+
+.flip-phone { position: relative; width: 44px; height: 76px; margin: 22px 0; border: 4px solid var(--pink); border-radius: 10px; animation: flip 2.6s ease-in-out infinite; }
+.flip-phone::after { content: ""; position: absolute; left: 50%; bottom: 5px; width: 12px; height: 3px; margin-left: -6px; border-radius: 2px; background: var(--pink); }
+@keyframes flip { 0%, 25% { transform: rotate(0); } 55%, 100% { transform: rotate(-90deg); } }
 
 /* ---------- reveal screens ---------- */
 /* square slot for a picture: put the image path in style="background-image: url(...)" */
